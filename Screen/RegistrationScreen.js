@@ -40,12 +40,14 @@ export default function RegistrationScreen() {
             <View style={styles.formWrap}>
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
+                key="login"
                 value={login}
                 onChangeText={loginHandler}
                 placeholder="Логін"
                 style={styles.input}
               />
               <TextInput
+                key="email"
                 value={email}
                 onChangeText={emailHandler}
                 placeholder="Адреса електронної пошти"
@@ -53,6 +55,7 @@ export default function RegistrationScreen() {
                 keyboardType="email-address"
               />
               <TextInput
+                key="password"
                 value={password}
                 onChangeText={passwordHandler}
                 placeholder="Пароль"
