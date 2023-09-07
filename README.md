@@ -10,7 +10,7 @@
 
 4. Run the project
 
-5. Mantain Android Studio
+5. Maintain Android Studio
 
 6. Install expo client on the phone
 
