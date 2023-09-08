@@ -1,3 +1,4 @@
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import {
   Button,
@@ -12,16 +13,27 @@ import {
   View,
 } from "react-native";
 
-export default function RegistrationScreen() {
+export default function REgistrationScreen() {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loaded] = useFonts({
+    "Roboto-Regular": require("../assets/Roboto-Regular.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
 
   const loginHandler = (login) => setLogin(login);
   const emailHandler = (email) => setEmail(email);
   const passwordHandler = (password) => setPassword(password);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-  const onLogin = () => {
+  const onRegister = () => {
     setLogin("");
     setEmail("");
     setPassword("");
@@ -54,20 +66,26 @@ export default function RegistrationScreen() {
                 style={styles.input}
                 keyboardType="email-address"
               />
-              <TextInput
-                key="password"
-                value={password}
-                onChangeText={passwordHandler}
-                placeholder="Пароль"
-                secureTextEntry={true}
-                style={styles.input}
-              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  value={password}
+                  onChangeText={passwordHandler}
+                  placeholder="Пароль"
+                  secureTextEntry={!showPassword}
+                  style={styles.passwordInput}
+                />
+                <TouchableWithoutFeedback onPress={toggleShowPassword}>
+                  <Text style={styles.showPasswordText}>
+                    {showPassword ? "Сховати" : "Показати"}
+                  </Text>
+                </TouchableWithoutFeedback>
+              </View>
               <Button
-                title={"Зареєстуватися"}
-                onPress={onLogin}
-                style={styles.button}
+                title="Зареєстуватися"
+                onPress={onRegister}
+                style={styles.buttonRg}
               />
-              <Text style={styles.text}>Вже є акаунт? Увійти</Text>
+              <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
             </View>
           </ImageBackground>
         </KeyboardAvoidingView>
@@ -93,12 +111,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
   title: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontSize: 30,
     fontWeight: "bold",
-    lineHeight: 35,
-    letterSpacing: 0.01,
-    color: "rgba(189, 189, 189, 1)",
+    lineHeight: 35.16,
+    letterSpacing: 1,
+    textAlign: "center",
+    color: "rgba(33, 33, 33, 1)",
+    marginBottom: 16,
   },
   input: {
     height: 50,
@@ -109,20 +129,57 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingLeft: 16,
   },
-  button: {
-    fontFamily: "Roboto",
+  passwordContainer: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "rgba(232, 232, 232, 1)",
+    backgroundColor: "rgba(246, 246, 246, 1)",
+    marginBottom: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  passwordInput: {
+    flex: 1,
+    height: 50,
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    fontWeight: "normal",
+    lineHeight: 18.75,
+  },
+  showPasswordText: {
+    paddingHorizontal: 8,
+    color: "rgba(27, 67, 113, 1)",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
     fontWeight: "normal",
     lineHeight: 18.75,
     textAlign: "center",
-    color: "rgba(255, 255, 255, 1)",
-    height: 51,
-    padding: 16,
-    borderRadius: 10,
-    backgroundColor: "rgba(255, 108, 0, 1)",
   },
-  text: {
-    fontFamily: "Roboto",
+  buttonRg: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    fontWeight: "normal",
+    lineHeight: 18.75,
+    color: "rgba(255, 255, 255, 1)",
+    width: 343,
+    height: 51,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 100,
+    gap: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 16,
+    backgroundColor: "rgba(255, 108, 0, 1)",
+    animationDuration: "0ms",
+    textTransform: "none",
+  },
+  textQ: {
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
     fontWeight: "normal",
     lineHeight: 18.75,
