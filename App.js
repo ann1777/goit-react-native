@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
-import RegistrationScreen from "./Screen/REgistrationScreen.js";
+import LoginScreen from "./Screen/LoginScreen.js";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -16,7 +17,21 @@ export default function App() {
 
   // return <>{!isRegister ? <RegistrationScreen /> : <LoginScreen />}</>;
   return (
-    <RegistrationScreen />
-    /* <LoginScreen /> */
+    <>
+      {/* <View style={styles.container}> */}
+      {/* <RegistrationScreen /> */}
+      <LoginScreen />
+      <StatusBar style="auto" />
+      {/* </View> */}
+    </>
   );
 }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+// });

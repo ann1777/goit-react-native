@@ -1,25 +1,39 @@
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import {
-  Button,
-  ImageBackground,
+  ImageBackgroundBase,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import backgroundImg from "../assets/ScreenBG.png";
 
-export default function REgistrationScreen() {
-  const [login, setLogin] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
+
+const RegistrationScreen = () => {
+  const [state, setState] = useState(initialState);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [email, setEmail] = useState(false);
+  const [isLoginFocus, setIsLoginFocus] = useState(false);
+  const [isEmailFocus, setIsEmailFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(false);
   const [loaded] = useFonts({
-    "Roboto-Regular": require("../assets/Roboto-Regular.ttf"),
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
   });
 
   if (!loaded) {
@@ -32,24 +46,25 @@ export default function REgistrationScreen() {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  const onRegister = () => {
-    setLogin("");
-    setEmail("");
-    setPassword("");
+  const handleSubmit = () => {
+    keyboardHide();
+    // console.log(state);
+    setState(initialState);
   };
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.keyboardAvoidingContainer}
-        >
-          <ImageBackground
-            source={require("../assets/ScreenBG.png")}
-            style={styles.image}
-          >
-            <View style={styles.formWrap}>
+        <ImageBackgroundBase source={backgroundImg} style={styles.image}>
+          <View style={styles.formWrap}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={styles.keyboardAvoidingContainer}
+            >
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
                 key="login"
@@ -68,31 +83,42 @@ export default function REgistrationScreen() {
               />
               <View style={styles.passwordContainer}>
                 <TextInput
-                  value={password}
+                  value={state.password}
                   onChangeText={passwordHandler}
                   placeholder="Пароль"
+                  placeholderTextColor={"#BDBDBD"}
                   secureTextEntry={!showPassword}
                   style={styles.passwordInput}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                    setIsPasswordFocus(true);
+                  }}
+                  onBlur={() => setIsPasswordFocus(false)}
                 />
-                <TouchableWithoutFeedback onPress={toggleShowPassword}>
-                  <Text style={styles.showPasswordText}>
+                <Pressable
+                  onPress={toggleShowPassword}
+                  style={styles.toggleButton}
+                >
+                  <Text style={styles.toggleText}>
                     {showPassword ? "Сховати" : "Показати"}
                   </Text>
-                </TouchableWithoutFeedback>
+                </Pressable>
               </View>
-              <Button
-                title="Зареєстуватися"
-                onPress={onRegister}
-                style={styles.buttonRg}
-              />
-              <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
-            </View>
-          </ImageBackground>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+            {!isShowKeyboard && (
+              <>
+                <Pressable onPress={handleSubmit} style={styles.buttonRg}>
+                  <Text style={styles.buttonText}>Зареєстуватися</Text>
+                </Pressable>
+                <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
+              </>
+            )}
+          </View>
+        </ImageBackgroundBase>
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -160,23 +186,26 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonRg: {
-    width: 343,
-    height: 51,
-    paddingVertical: 106,
-    // paddingHorizontal: 32,
-    borderRadius: 100,
-    // gap: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-    backgroundColor: "rgba(255, 108, 0, 1)",
-    animationDuration: "0ms",
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     fontWeight: "normal",
     lineHeight: 18.75,
-    textTransform: "none",
+    textAlign: "center",
     color: "rgba(255, 255, 255, 1)",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 51,
+    padding: 16,
+    borderRadius: 50,
+    marginBottom: 15,
+    backgroundColor: "rgba(255, 108, 0, 1)",
+  },
+  buttonText: {
+    color: "rgba(255, 255, 255, 1)",
+    fontSize: 16,
+    fontWeight: "normal",
+    lineHeight: 18.75,
+    fontFamily: "Roboto-Regular",
   },
   textQ: {
     fontFamily: "Roboto-Regular",
@@ -187,3 +216,5 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
+
+export default RegistrationScreen;

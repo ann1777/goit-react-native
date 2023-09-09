@@ -1,10 +1,10 @@
-import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import {
-  Button,
+  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -12,78 +12,63 @@ import {
   View,
 } from "react-native";
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loaded] = useFonts({
-    "Roboto-Regular": require("../assets/Roboto-Regular.ttf"),
-  });
+import backgroundImg from "../assets/ScreenBG.png";
 
-  if (!loaded) {
-    return null;
-  }
-
-  const emailHandler = (email) => setEmail(email);
-  const passwordHandler = (password) => setPassword(password);
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const onLogin = () => {
-    setEmail("");
-    setPassword("");
-  };
-
-  return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          <TextInput
-            value={email}
-            onChangeText={emailHandler}
-            placeholder="Адреса електронної пошти"
-            style={styles.input}
-          />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              value={password}
-              onChangeText={passwordHandler}
-              placeholder="Пароль"
-              secureTextEntry={!showPassword}
-              style={styles.passwordInput}
-            />
-            <TouchableWithoutFeedback onPress={toggleShowPassword}>
-              <Text style={styles.showPasswordText}>
-                {showPassword ? "Сховати" : "Показати"}
-              </Text>
-            </TouchableWithoutFeedback>
-          </View>
-          <Button title={"Увійти"} onPress={onLogin} />
-          <Text style={styles.text}>Немає акаунту? Зареєструватися</Text>
-        </KeyboardAvoidingView>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-}
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    height: "100%",
+    width: "100%",
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
+  formWrap: {
+    width: "100%",
+    paddingHorizontal: 20,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingTop: 30,
+  },
+  title: {
+    fontFamily: "Roboto-Medium",
+    fontSize: 30,
+    fontWeight: "bold",
+    lineHeight: 35.16,
+    letterSpacing: 1,
+    textAlign: "center",
+    color: "rgba(33, 33, 33, 1)",
+    marginBottom: 16,
+  },
+  inputWrap: {
+    flexDirection: "column",
+    gap: 16,
+    marginBottom: 30,
+  },
+  bgImage: {
+    position: "absolute",
+    width: "100%",
+    top: 0,
+  },
   input: {
-    width: 343,
     height: 50,
     padding: 16,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 1)",
     marginBottom: 16,
+
+    color: "#212121",
+    backgroundColor: "rgba(255, 255, 255, 1)",
+
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: "rgba(232, 232, 232, 1)",
+
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
   },
   passwordContainer: {
     flexDirection: "row",
@@ -98,7 +83,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 1)",
   },
-  showPasswordText: {
+  toggleText: {
     paddingHorizontal: 8,
     fontFamily: "Roboto-Regular",
     fontSize: 16,
@@ -106,7 +91,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.75,
     textAlign: "center",
   },
-  button: {
+  buttonLg: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     fontWeight: "normal",
@@ -115,10 +100,18 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 1)",
     height: 51,
     padding: 16,
-    borderRadius: 10,
+    borderRadius: 50,
     backgroundColor: "rgba(255, 108, 0, 1)",
   },
-  text: {
+  buttonText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "normal",
+    lineHeight: 16,
+    fontFamily: "Roboto-Regular",
+  },
+  textQ: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     fontWeight: "normal",
@@ -127,3 +120,116 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
+
+const LoginScreen = () => {
+  const [state, setState] = useState(initialState);
+  const [login, setLogin] = useState(false);
+  const [email, setEmail] = useState(false);
+  const [password, setPassword] = useState(false);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isEmailFocus, setIsEmailFocus] = useState(false);
+  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  // const [loaded] = useFonts({
+  //   "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+  //   "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+  //   "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+  // });
+
+  // if (!loaded) {
+  //   return null;
+  // }
+
+  const handleSubmit = () => {
+    keyboardHide();
+    setState(initialState);
+  };
+  const handleFocus = () => {
+    setIsShowKeyboard(true);
+    setIsEmailFocus(true);
+  };
+  const handleKeyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  const emailHandler = (value) => {
+    setState((prevState) => ({ ...prevState, email: value }));
+    setEmail(email);
+  };
+  const passwordHandler = (password) => {
+    setState((prevState) => ({ ...prevState, password: value }));
+    setPassword(password);
+    setIsPasswordHidden();
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <TouchableWithoutFeedback onPress={handleKeyboardHide}>
+      <View style={styles.container}>
+        <ImageBackground source={backgroundImg} style={styles.bgImage}>
+          <View style={styles.formWrap}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+              style={styles.keyboardView}
+            >
+              <Text style={styles.title}>Увійти</Text>
+              <TextInput
+                value={state.email}
+                onChangeText={emailHandler}
+                placeholder="Адреса електронної пошти"
+                placeholderTextColor={"#BDBDBD"}
+                style={{
+                  ...styles.input,
+                  borderColor: isEmailFocus ? "#ff6c00" : "#e8e8e8",
+                  backgroundColor: isEmailFocus ? "#fff" : "#f6f6f6",
+                }}
+                onFocus={() => {
+                  handleFocus();
+                }}
+                onBlur={() => setIsEmailFocus(false)}
+              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  value={state.password}
+                  onChangeText={passwordHandler}
+                  placeholder="Пароль"
+                  placeholderTextColor={"#BDBDBD"}
+                  secureTextEntry={!showPassword}
+                  style={styles.passwordInput}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                    setIsPasswordFocus(true);
+                  }}
+                  onBlur={() => setIsPasswordFocus(false)}
+                />
+                <Pressable
+                  onPress={toggleShowPassword}
+                  style={styles.toggleButton}
+                >
+                  <Text style={styles.toggleText}>
+                    {showPassword ? "Сховати" : "Показати"}
+                  </Text>
+                </Pressable>
+              </View>
+            </KeyboardAvoidingView>
+            {!isShowKeyboard && (
+              <View>
+                <Pressable onPress={handleSubmit} style={styles.buttonLg}>
+                  <Text style={styles.buttonText}>Увійти</Text>
+                </Pressable>
+                <Text style={styles.textQ}>Немає акаунту? Зареєструватися</Text>
+              </View>
+            )}
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+export default LoginScreen;
