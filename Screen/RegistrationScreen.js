@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import {
+  Image,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
@@ -9,10 +10,12 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import backgroundImg from "../assets/ScreenBG.png";
+import SvgAddButton from "../assets/svg/svgAddButton";
 
 const initialState = {
   login: "",
@@ -23,6 +26,7 @@ const initialState = {
 
 export default function RegistrationScreen() {
   const [state, setState] = useState(initialState);
+  const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -69,12 +73,28 @@ export default function RegistrationScreen() {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <ImageBackground source={backgroundImg} style={styles.image}>
+        <ImageBackground source={backgroundImg} style={styles.imageBg}>
           <View style={styles.formWrap}>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.keyboardAvoidingContainer}
             >
+              <View style={styles.avatarWrapper}>
+                <Image style={styles.avatar} />
+                <TouchableOpacity
+                  style={
+                    isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
+                  }
+                >
+                  <SvgAddButton
+                    style={
+                      isAvatar
+                        ? styles.btnAddAvatarSvgLoad
+                        : styles.btnAddAvatarSvg
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
                 key="login"
@@ -117,15 +137,15 @@ export default function RegistrationScreen() {
                   </Text>
                 </Pressable>
               </View>
+              {!isShowKeyboard && (
+                <View>
+                  <Pressable onPress={handleSubmit} style={styles.buttonRg}>
+                    <Text style={styles.buttonText}>Зареєстуватися</Text>
+                  </Pressable>
+                  <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
+                </View>
+              )}
             </KeyboardAvoidingView>
-            {!isShowKeyboard && (
-              <>
-                <Pressable onPress={handleSubmit} style={styles.buttonRg}>
-                  <Text style={styles.buttonText}>Зареєстуватися</Text>
-                </Pressable>
-                <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
-              </>
-            )}
           </View>
         </ImageBackground>
       </View>
@@ -142,18 +162,82 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  image: {
+  imageBg: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",
   },
 
   formWrap: {
-    padding: 20,
+    paddingHorizontal: 16,
+    width: "100%",
+    height: "67.61%",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
 
+  avatarWrapper: {
+    position: "absolute",
+    top: -60,
+    alignSelf: "center",
+    width: 120,
+    height: 120,
+    backgroundColor: "rgba(246, 246, 246, 1)",
+    borderRadius: 16,
+  },
+
+  avatar: {
+    width: 120,
+    height: 120,
+  },
+  btnAddAvatar: {
+    position: "absolute",
+    bottom: 14,
+    right: -12.5,
+
+    alignItems: "center",
+    alignContent: "center",
+
+    width: 25,
+    height: 25,
+
+    color: "#ff6c00",
+    backgroundColor: "#ffffff",
+    borderRadius: 50,
+  },
+
+  btnAddAvatarLoad: {
+    position: "absolute",
+    bottom: 14,
+    right: -12.5,
+
+    alignItems: "center",
+    alignContent: "center",
+
+    width: 25,
+    height: 25,
+
+    color: "#ff6c00",
+    backgroundColor: "#ffffff",
+    borderRadius: 50,
+
+    transform: [{ rotate: "45deg" }],
+  },
+  btnAddAvatarSvg: {
+    fill: "#ff6c00",
+    stroke: "#ff6c00",
+    backgroundColor: "#ffffff",
+  },
+  btnAddAvatarSvgLoad: {
+    fill: "#bdbdbd",
+    stroke: "#e8e8e8",
+    backgroundColor: "#ffffff",
+  },
+
   title: {
+    marginTop: 52,
+    marginBottom: 32,
     fontFamily: "Roboto-Regular",
     fontSize: 30,
     fontWeight: "bold",
@@ -161,7 +245,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     textAlign: "center",
     color: "rgba(33, 33, 33, 1)",
-    marginBottom: 16,
+    // marginBottom: 16,
   },
 
   input: {

@@ -1,7 +1,8 @@
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import LoginScreen from "./Screen/LoginScreen.js";
+import RegistrationScreen from "./Screen/RegistrationScreen.js";
 
 export default function App() {
   const [isRegistered, setIsRegistered] = useState(false);
