@@ -1,7 +1,7 @@
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import {
-  ImageBackgroundBase,
+  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -18,18 +18,14 @@ const initialState = {
   login: "",
   email: "",
   password: "",
+  isPasswordFocus: false,
 };
 
-const RegistrationScreen = () => {
+export default function RegistrationScreen() {
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [login, setLogin] = useState(false);
-  const [email, setEmail] = useState(false);
-  const [isLoginFocus, setIsLoginFocus] = useState(false);
-  const [isEmailFocus, setIsEmailFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
-  const [isPasswordHidden, setIsPasswordHidden] = useState(false);
+
   const [loaded] = useFonts({
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
@@ -40,17 +36,31 @@ const RegistrationScreen = () => {
     return null;
   }
 
-  const loginHandler = (login) => setLogin(login);
-  const emailHandler = (email) => setEmail(email);
-  const passwordHandler = (password) => setPassword(password);
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
+  const loginHandler = (value) => {
+    setState((prevState) => ({ ...prevState, login: value }));
   };
+
+  const emailHandler = (value) => {
+    setState((prevState) => ({ ...prevState, email: value }));
+  };
+
+  const passwordHandler = (value) => {
+    setState((prevState) => ({ ...prevState, password: value }));
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const setIsPasswordFocus = (value) => {
+    setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
+  };
+
   const handleSubmit = () => {
     keyboardHide();
-    // console.log(state);
     setState(initialState);
   };
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -59,7 +69,7 @@ const RegistrationScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <ImageBackgroundBase source={backgroundImg} style={styles.image}>
+        <ImageBackground source={backgroundImg} style={styles.image}>
           <View style={styles.formWrap}>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -68,14 +78,14 @@ const RegistrationScreen = () => {
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
                 key="login"
-                value={login}
+                value={state.login}
                 onChangeText={loginHandler}
                 placeholder="Логін"
                 style={styles.input}
               />
               <TextInput
                 key="email"
-                value={email}
+                value={state.email}
                 onChangeText={emailHandler}
                 placeholder="Адреса електронної пошти"
                 style={styles.input}
@@ -93,7 +103,10 @@ const RegistrationScreen = () => {
                     setIsShowKeyboard(true);
                     setIsPasswordFocus(true);
                   }}
-                  onBlur={() => setIsPasswordFocus(false)}
+                  onBlur={() => {
+                    setIsPasswordFocus(false);
+                    setIsShowKeyboard(false);
+                  }}
                 />
                 <Pressable
                   onPress={toggleShowPassword}
@@ -114,28 +127,32 @@ const RegistrationScreen = () => {
               </>
             )}
           </View>
-        </ImageBackgroundBase>
+        </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   keyboardAvoidingContainer: {
     flex: 1,
   },
+
   image: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",
   },
+
   formWrap: {
     padding: 20,
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
+
   title: {
     fontFamily: "Roboto-Regular",
     fontSize: 30,
@@ -146,6 +163,7 @@ const styles = StyleSheet.create({
     color: "rgba(33, 33, 33, 1)",
     marginBottom: 16,
   },
+
   input: {
     height: 50,
     borderWidth: 1,
@@ -155,6 +173,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingLeft: 16,
   },
+
   passwordContainer: {
     height: 50,
     borderWidth: 1,
@@ -168,6 +187,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+
   passwordInput: {
     flex: 1,
     height: 50,
@@ -176,15 +196,23 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     lineHeight: 18.75,
   },
-  showPasswordText: {
+
+  toggleButton: {
+    padding: 8,
+  },
+
+  toggleText: {
+    textAlign: "center",
     paddingHorizontal: 8,
-    color: "rgba(27, 67, 113, 1)",
+
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     fontWeight: "normal",
     lineHeight: 18.75,
-    textAlign: "center",
+
+    color: "rgba(27, 67, 113, 1)",
   },
+
   buttonRg: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
@@ -192,6 +220,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.75,
     textAlign: "center",
     color: "rgba(255, 255, 255, 1)",
+
     alignItems: "center",
     justifyContent: "center",
     height: 51,
@@ -200,6 +229,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: "rgba(255, 108, 0, 1)",
   },
+
   buttonText: {
     color: "rgba(255, 255, 255, 1)",
     fontSize: 16,
@@ -207,6 +237,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.75,
     fontFamily: "Roboto-Regular",
   },
+
   textQ: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
@@ -216,5 +247,3 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
-
-export default RegistrationScreen;

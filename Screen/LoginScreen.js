@@ -1,6 +1,6 @@
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import {
-  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -15,10 +15,115 @@ import {
 import backgroundImg from "../assets/ScreenBG.png";
 
 const initialState = {
-  login: "",
   email: "",
   password: "",
 };
+
+export default function LoginScreen() {
+  const [state, setState] = useState(initialState);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isEmailFocus, setIsEmailFocus] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [loaded] = useFonts({
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
+  const handleSubmit = () => {
+    handleKeyboardHide();
+    setState(initialState);
+  };
+
+  const handleFocus = () => {
+    setIsShowKeyboard(true);
+    setIsEmailFocus(true);
+  };
+
+  const handleKeyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  const emailHandler = (value) => {
+    setState((prevState) => ({ ...prevState, email: value }));
+  };
+
+  const passwordHandler = (value) => {
+    setState((prevState) => ({ ...prevState, password: value }));
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <TouchableWithoutFeedback onPress={handleKeyboardHide}>
+      <View style={styles.container}>
+        <ImageBackground source={backgroundImg} style={styles.bgImage}>
+          <View style={styles.formWrap}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+              style={styles.keyboardView}
+            >
+              <Text style={styles.title}>Увійти</Text>
+              <TextInput
+                value={state.email}
+                onChangeText={emailHandler}
+                placeholder="Адреса електронної пошти"
+                placeholderTextColor="#BDBDBD"
+                style={[
+                  styles.input,
+                  {
+                    borderColor: isEmailFocus ? "#ff6c00" : "#e8e8e8",
+                    backgroundColor: isEmailFocus ? "#fff" : "#f6f6f6",
+                  },
+                ]}
+                onFocus={handleFocus}
+                onBlur={() => setIsEmailFocus(false)}
+              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  value={state.password}
+                  onChangeText={passwordHandler}
+                  placeholder="Пароль"
+                  placeholderTextColor="#BDBDBD"
+                  secureTextEntry={!showPassword}
+                  style={styles.passwordInput}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                  }}
+                  onBlur={() => setIsShowKeyboard(false)}
+                />
+                <Pressable
+                  onPress={toggleShowPassword}
+                  style={styles.toggleButton}
+                >
+                  <Text style={styles.toggleText}>
+                    {showPassword ? "Сховати" : "Показати"}
+                  </Text>
+                </Pressable>
+              </View>
+            </KeyboardAvoidingView>
+            {!isShowKeyboard && (
+              <View>
+                <Pressable onPress={handleSubmit} style={styles.buttonLg}>
+                  <Text style={styles.buttonText}>Увійти</Text>
+                </Pressable>
+                <Text style={styles.textQ}>Немає акаунту? Зареєструватися</Text>
+              </View>
+            )}
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -120,116 +225,3 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
-
-const LoginScreen = () => {
-  const [state, setState] = useState(initialState);
-  const [login, setLogin] = useState(false);
-  const [email, setEmail] = useState(false);
-  const [password, setPassword] = useState(false);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [isEmailFocus, setIsEmailFocus] = useState(false);
-  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
-  const [isPasswordHidden, setIsPasswordHidden] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  // const [loaded] = useFonts({
-  //   "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-  //   "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  //   "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-  // });
-
-  // if (!loaded) {
-  //   return null;
-  // }
-
-  const handleSubmit = () => {
-    keyboardHide();
-    setState(initialState);
-  };
-  const handleFocus = () => {
-    setIsShowKeyboard(true);
-    setIsEmailFocus(true);
-  };
-  const handleKeyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
-
-  const emailHandler = (value) => {
-    setState((prevState) => ({ ...prevState, email: value }));
-    setEmail(email);
-  };
-  const passwordHandler = (password) => {
-    setState((prevState) => ({ ...prevState, password: value }));
-    setPassword(password);
-    setIsPasswordHidden();
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  return (
-    <TouchableWithoutFeedback onPress={handleKeyboardHide}>
-      <View style={styles.container}>
-        <ImageBackground source={backgroundImg} style={styles.bgImage}>
-          <View style={styles.formWrap}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS == "ios" ? "padding" : "height"}
-              style={styles.keyboardView}
-            >
-              <Text style={styles.title}>Увійти</Text>
-              <TextInput
-                value={state.email}
-                onChangeText={emailHandler}
-                placeholder="Адреса електронної пошти"
-                placeholderTextColor={"#BDBDBD"}
-                style={{
-                  ...styles.input,
-                  borderColor: isEmailFocus ? "#ff6c00" : "#e8e8e8",
-                  backgroundColor: isEmailFocus ? "#fff" : "#f6f6f6",
-                }}
-                onFocus={() => {
-                  handleFocus();
-                }}
-                onBlur={() => setIsEmailFocus(false)}
-              />
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  value={state.password}
-                  onChangeText={passwordHandler}
-                  placeholder="Пароль"
-                  placeholderTextColor={"#BDBDBD"}
-                  secureTextEntry={!showPassword}
-                  style={styles.passwordInput}
-                  onFocus={() => {
-                    setIsShowKeyboard(true);
-                    setIsPasswordFocus(true);
-                  }}
-                  onBlur={() => setIsPasswordFocus(false)}
-                />
-                <Pressable
-                  onPress={toggleShowPassword}
-                  style={styles.toggleButton}
-                >
-                  <Text style={styles.toggleText}>
-                    {showPassword ? "Сховати" : "Показати"}
-                  </Text>
-                </Pressable>
-              </View>
-            </KeyboardAvoidingView>
-            {!isShowKeyboard && (
-              <View>
-                <Pressable onPress={handleSubmit} style={styles.buttonLg}>
-                  <Text style={styles.buttonText}>Увійти</Text>
-                </Pressable>
-                <Text style={styles.textQ}>Немає акаунту? Зареєструватися</Text>
-              </View>
-            )}
-          </View>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-};
-
-export default LoginScreen;
