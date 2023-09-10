@@ -70,7 +70,7 @@ export default function RegistrationScreen() {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.keyboardAvoidingContainer}
             >
-              <Text style={styles.title}>Реєстрація</Text>
+              <Text style={styles.title}>Увійти</Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   key="email"
@@ -84,7 +84,7 @@ export default function RegistrationScreen() {
                   <TextInput
                     value={state.password}
                     onChangeText={passwordHandler}
-                    placeholder="Пароль"
+                    placeholder="••••••••••••"
                     placeholderTextColor={"#BDBDBD"}
                     secureTextEntry={!showPassword}
                     style={styles.passwordInput}
@@ -107,9 +107,19 @@ export default function RegistrationScreen() {
                   </Pressable>
                 </View>
                 <Pressable onPress={handleSubmit} style={styles.buttonRg}>
-                  <Text style={styles.buttonText}>Зареєстуватися</Text>
+                  <Text style={styles.buttonText}>Увійти</Text>
                 </Pressable>
-                <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
+                <Text style={styles.textQ}>
+                  Немає акаунту?{" "}
+                  <Text
+                    style={{
+                      ...styles.textLink,
+                      textDecorationLine: "underline",
+                    }}
+                  >
+                    Зареєструватися
+                  </Text>
+                </Text>
               </View>
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
@@ -131,9 +141,9 @@ const styles = StyleSheet.create({
   },
 
   loginWrap: {
-    width: 375,
-    height: 489,
-    top: 323,
+    width: "100%",
+    height: "60.2%",
+    top: "39.8%",
     bottom: 0,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -152,14 +162,13 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     textAlign: "center",
     color: "rgba(33, 33, 33, 1)",
-    marginBottom: 16,
-    marginTop: 50, // Adjust the top margin as needed
+    marginTop: 32,
+    marginBottom: 32,
   },
 
   inputContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    marginTop: 30,
   },
 
   input: {
@@ -178,7 +187,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "rgba(232, 232, 232, 1)",
     backgroundColor: "rgba(246, 246, 246, 1)",
-    marginBottom: 16,
+    marginBottom: 43,
     paddingLeft: 16,
     paddingRight: 16,
     flexDirection: "row",
@@ -189,19 +198,15 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     height: 50,
+    width: "100%",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
     fontWeight: "normal",
     lineHeight: 18.75,
   },
 
-  toggleButton: {
-    padding: 8,
-  },
-
   toggleText: {
     textAlign: "center",
-    paddingHorizontal: 8,
 
     fontFamily: "Roboto-Regular",
     fontSize: 16,
