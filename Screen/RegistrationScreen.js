@@ -164,14 +164,18 @@ const styles = StyleSheet.create({
 
   imageBg: {
     flex: 1,
+    top: 0,
+    height: "100%",
+    width: "100%",
     resizeMode: "cover",
     justifyContent: "center",
   },
 
   formWrap: {
-    paddingHorizontal: 16,
+    top: "19%",
     width: "100%",
     height: "67.61%",
+    paddingHorizontal: 16,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: "rgba(255, 255, 255, 1)",
@@ -236,6 +240,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    paddingTop: 32,
     marginTop: 52,
     marginBottom: 32,
     fontFamily: "Roboto-Regular",
