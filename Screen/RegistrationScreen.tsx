@@ -63,6 +63,10 @@ export default function RegistrationScreen() {
   const handleSubmit = () => {
     keyboardHide();
     setState(initialState);
+    if (!onRegister) {
+      onRegister();
+      setAvatar();
+    }
   };
 
   const keyboardHide = () => {
