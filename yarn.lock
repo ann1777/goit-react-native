@@ -5796,6 +5796,11 @@
     "commander" "2.20.0"
     "update-check" "1.5.3"
 
+"expo-status-bar@^1.7.1":
+  "integrity" "sha512-Wkm9uCmuQQBSU+l/AekWAQ1d0FYw560yL116+OAKJDyKBOUpPURoWkFbabM1EDxv+5scTuSThr/CvsA0nsSCow=="
+  "resolved" "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.7.1.tgz"
+  "version" "1.7.1"
+
 "expo@*", "expo@^48.0.17":
   "integrity" "sha512-SDRlLRINWWqf/OIPaUr/BsFZLhR5oEj1u9Cn06h1mPeo8pqv6ei/QTSZql4e0ixHIu3PWMPrUx9k/47nnTyTpg=="
   "resolved" "https://registry.npmjs.org/expo/-/expo-48.0.20.tgz"

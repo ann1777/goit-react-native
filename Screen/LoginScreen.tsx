@@ -29,13 +29,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [loaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": RobotoRegular,
+    "Roboto-Medium": RobotoMedium,
+    "Roboto-Bold": RobotoBold,
   });
 
-  if (!loaded) {
+  if (!fontsLoaded) {
     return null;
   }
 
@@ -64,7 +64,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   };
 
   const keyboardHide = () => {
-    setIsShowKeyboard(false);
+    if (isShowKeyboard) setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
