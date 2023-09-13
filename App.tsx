@@ -22,6 +22,8 @@ function App() {
     if (!fontsLoaded) {
         return null;
     }
-    return (react_1.default.createElement(react_1.default.Fragment, null, isLogin ? (react_1.default.createElement(LoginScreen_1.default, { onLogin: handleLogin })) : (react_1.default.createElement(RegistrationScreen_1.default, { onRegister: handleRegister })), react_1.default.createElement(react_native_1.StatusBar, { style: "auto" })));
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        isLogin ? (react_1.default.createElement(LoginScreen_1.default, { onLogin: handleLogin })) : (react_1.default.createElement(RegistrationScreen_1.default, { onRegister: handleRegister })),
+        react_1.default.createElement(react_native_1.StatusBar, { style: "auto" })));
 }
 exports.default = App;

@@ -22,8 +22,14 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "android": { "softwareKeyboardLayoutMode": "pan" },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "expo": {
+      "experiments": {
+        "tsconfigPaths": true
+      }
     }
   }
 }
