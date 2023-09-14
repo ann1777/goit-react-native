@@ -18,7 +18,7 @@ import ScreenBG from "../assets/img/ScreenBG.png";
 import AddButtonSvg from "../assets/svg/svgAddButton.jsx";
 
 interface RegistrationScreenProps {
-  onRegister: () => void;
+  onRegister: () => {};
 }
 
 const initialState = {

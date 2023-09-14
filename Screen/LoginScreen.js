@@ -67,7 +67,7 @@ const LoginScreen = ({ onLogin }) => {
   const handleSubmit = () => {
     keyboardHide();
     setState(initialState);
-    if (!onLogin) {
+    if (onLogin) {
       onLogin();
     }
   };
