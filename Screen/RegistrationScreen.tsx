@@ -28,9 +28,9 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-export default function RegistrationScreen({
-  onRegister,
-}: RegistrationScreenProps) {
+const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
+  onRegister = () => {},
+}) => {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -69,7 +69,7 @@ export default function RegistrationScreen({
   const handleSubmit = () => {
     keyboardHide();
     setState(initialState);
-    if (!onRegister) {
+    if (onRegister) {
       onRegister();
       setAvatar();
     }
@@ -152,7 +152,17 @@ export default function RegistrationScreen({
                   <Pressable onPress={handleSubmit} style={styles.buttonRg}>
                     <Text style={styles.buttonText}>Зареєстуватися</Text>
                   </Pressable>
-                  <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
+                  <Text style={styles.textQ}>
+                    Вже є акаунт?{" "}
+                    <Text
+                      style={{ textDecorationLine: "underline" }}
+                      onPress={() => {
+                        navigation.navigate(<RegistrationScreen />);
+                      }}
+                    >
+                      Увійти
+                    </Text>
+                  </Text>
                 </View>
               )}
             </KeyboardAvoidingView>
@@ -161,7 +171,7 @@ export default function RegistrationScreen({
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -346,3 +356,5 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
+
+export default RegistrationScreen;

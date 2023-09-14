@@ -14,10 +14,9 @@ import {
   View,
 } from "react-native";
 import backgroundImg from "../assets/img/ScreenBG.png";
-
-interface LoginScreenProps {
-  onLogin?: () => void;
-}
+import LoginScreenProps from "./LoginScreenProps";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../Components/Navigation";
 
 const initialState = {
   email: "",
@@ -25,7 +24,21 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
+interface DefaultLoginScreenProps extends LoginScreenProps {
+  onLogin: () => void;
+  navigation: StackNavigationProp<RootStackParamList, "RegistrationScreen">;
+}
+
+const LoginScreen: React.FC<DefaultLoginScreenProps> = ({
+  onLogin,
+  navigation,
+}) => {
+  onLogin = onLogin || (() => {});
+  const handleDefaultNavigation = () => {
+    navigation.navigate("RegistrationScreen");
+  };
+
+  navigation = navigation || handleDefaultNavigation;
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -120,6 +133,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   <Text
                     style={{
                       textDecorationLine: "underline",
+                    }}
+                    onPress={() => {
+                      navigation.navigate("RegistrationScreen");
                     }}
                   >
                     Зареєструватися
