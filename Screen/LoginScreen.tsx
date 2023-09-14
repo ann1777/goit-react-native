@@ -1,4 +1,5 @@
 import { useFonts } from "expo-font";
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import {
   ImageBackground,
@@ -29,13 +30,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": RobotoRegular,
-    "Roboto-Medium": RobotoMedium,
-    "Roboto-Bold": RobotoBold,
+  const [loaded] = useFonts({
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
   });
 
-  if (!fontsLoaded) {
+  if (!loaded) {
     return null;
   }
 
@@ -84,15 +85,16 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   value={state.email}
                   onChangeText={emailHandler}
                   placeholder="Адреса електронної пошти"
-                  style={{ ...styles.input, placeholderTextColor: "#BDBDBD" }}
+                  style={styles.input}
+                  placeholderTextColor="#BDBDBD"
                   keyboardType="email-address"
                 />
+
                 <View style={styles.passwordContainer}>
                   <TextInput
                     value={state.password}
                     onChangeText={passwordHandler}
                     placeholder="••••••••••••"
-                    placeholderTextColor={"#BDBDBD"}
                     secureTextEntry={!showPassword}
                     style={styles.passwordInput}
                     onFocus={() => {
@@ -130,6 +132,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
       </ImageBackground>
     </View>
   );
+};
+
+LoginScreen.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -190,6 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "rgba(232, 232, 232, 1)",
     backgroundColor: "rgba(246, 246, 246, 1)",
+    placeholderTextColor: "#BDBDBD",
     marginBottom: 43,
     paddingLeft: 16,
     paddingRight: 16,

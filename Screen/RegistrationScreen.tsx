@@ -14,8 +14,12 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import backgroundImg from "../assets/img/ScreenBG.png";
-import SvgAddButton from "../assets/svg/svgAddButton.jsx";
+import ScreenBG from "../assets/img/ScreenBG.png";
+import AddButtonSvg from "../assets/svg/svgAddButton.jsx";
+
+interface RegistrationScreenProps {
+  onRegister: () => void;
+}
 
 const initialState = {
   login: "",
@@ -24,7 +28,9 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({
+  onRegister,
+}: RegistrationScreenProps) {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -77,7 +83,7 @@ export default function RegistrationScreen() {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <ImageBackground source={backgroundImg} style={styles.imageBg}>
+        <ImageBackground source={ScreenBG} style={styles.imageBg}>
           <View style={styles.formWrap}>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -90,7 +96,7 @@ export default function RegistrationScreen() {
                     isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
                   }
                 >
-                  <SvgAddButton
+                  <AddButtonSvg
                     style={
                       isAvatar
                         ? styles.btnAddAvatarSvgLoad
@@ -120,7 +126,7 @@ export default function RegistrationScreen() {
                   value={state.password}
                   onChangeText={passwordHandler}
                   placeholder="Пароль"
-                  placeholderTextColor={"#BDBDBD"}
+                  placeholderTextColor="#BDBDBD"
                   secureTextEntry={!showPassword}
                   style={styles.passwordInput}
                   onFocus={() => {

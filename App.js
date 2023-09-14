@@ -1,15 +1,18 @@
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StatusBar } from "react-native";
-import RobotoBold from "../assets/fonts/Roboto-Bold.ttf";
-import RobotoMedium from "../assets/fonts/Roboto-Medium.ttf";
-import RobotoRegular from "../assets/fonts/Roboto-Regular.ttf";
 import LoginScreen from "./Screen/LoginScreen";
 import RegistrationScreen from "./Screen/RegistrationScreen";
 
 function App() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
 
   const handleRegister = () => {
     setIsRegistered(true);
@@ -18,12 +21,6 @@ function App() {
   const handleLogin = () => {
     setIsLogin(true);
   };
-
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": RobotoRegular,
-    "Roboto-Medium": RobotoMedium,
-    "Roboto-Bold": RobotoBold,
-  });
 
   if (!fontsLoaded) {
     return null;
@@ -35,7 +32,7 @@ function App() {
         <LoginScreen onLogin={handleLogin} />
       ) : isRegistered ? (
         <RegistrationScreen onRegister={handleRegister} />
-      ) : null}{" "}
+      ) : null}
       <StatusBar style="auto" />
     </>
   );
