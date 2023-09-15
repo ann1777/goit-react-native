@@ -1,12 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Animated,
+  Dimensions,
   Image,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -18,7 +19,7 @@ import ScreenBG from "../assets/img/ScreenBG.png";
 import AddButtonSvg from "../assets/svg/svgAddButton.jsx";
 
 interface RegistrationScreenProps {
-  onRegister: () => {};
+  onRegister: () => void;
 }
 
 const initialState = {
@@ -28,13 +29,38 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
-  onRegister = () => {},
-}) => {
+export default function RegistrationScreen({onRegister}: RegistrationScreenProps) {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
+  const [position, setPosition] = useState(new Animated.Value(50));
+  const [shift, setShift] = useState(false);
+  const navigation = useNavigation();
+  useEffect(() => {
+    const listenerShow = Keyboard.addListener("keyboardDidShow", () => {
+      setShift(true);
+    });
+    const listenerHide = Keyboard.addListener("keyboardDidHide", () => {
+      setShift(false);
+    });
+    return () => {
+      listenerShow.remove();
+      listenerHide.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    Animated.timing(position, {
+      toValue: shift ? 130 : 50,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [shift]);
+
+  const handleDefaultNavigation = () => {
+    navigation.navigate("LoginScreen");
+  };
 
   const [loaded] = useFonts({
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
@@ -59,20 +85,18 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   };
 
   const toggleShowPassword = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
+    setHidePassword(!hidePassword);
   };
 
   const setIsPasswordFocus = (value: boolean) => {
     setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     keyboardHide();
     setState(initialState);
-    if (onRegister) {
-      onRegister();
-      setAvatar();
-    }
+    onRegister();
   };
 
   const keyboardHide = () => {
@@ -106,76 +130,87 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
                 </TouchableOpacity>
               </View>
               <Text style={styles.title}>Реєстрація</Text>
-              <TextInput
-                key="login"
-                value={state.login}
-                onChangeText={loginHandler}
-                placeholder="Логін"
-                style={styles.input}
-              />
-              <TextInput
-                key="email"
-                value={state.email}
-                onChangeText={emailHandler}
-                placeholder="Адреса електронної пошти"
-                style={styles.input}
-                keyboardType="email-address"
-              />
-              <View style={styles.passwordContainer}>
+              <View style={styles.inputsContainer}>
                 <TextInput
-                  value={state.password}
-                  onChangeText={passwordHandler}
-                  placeholder="Пароль"
-                  placeholderTextColor="#BDBDBD"
-                  secureTextEntry={!showPassword}
-                  style={styles.passwordInput}
-                  onFocus={() => {
-                    setIsShowKeyboard(true);
-                    setIsPasswordFocus(true);
-                  }}
-                  onBlur={() => {
-                    setIsPasswordFocus(false);
-                    setIsShowKeyboard(false);
-                  }}
+                  key="login"
+                  value={state.login}
+                  onChangeText={loginHandler}
+                  placeholder="Логін"
+                  style={styles.input}
                 />
-                <Pressable
-                  onPress={toggleShowPassword}
-                  style={styles.toggleButton}
-                >
-                  <Text style={styles.toggleText}>
-                    {showPassword ? "Сховати" : "Показати"}
-                  </Text>
-                </Pressable>
-              </View>
-              {!isShowKeyboard && (
-                <View>
-                  <Pressable onPress={handleSubmit} style={styles.buttonRg}>
-                    <Text style={styles.buttonText}>Зареєстуватися</Text>
-                  </Pressable>
-                  <Text style={styles.textQ}>
-                    Вже є акаунт?{" "}
-                    <Text
-                      style={{ textDecorationLine: "underline" }}
-                      onPress={() => {
-                        navigation.navigate(<RegistrationScreen />);
-                      }}
-                    >
-                      Увійти
+                <TextInput
+                  key="email"
+                  value={state.email}
+                  onChangeText={emailHandler}
+                  placeholder="Адреса електронної пошти"
+                  style={styles.input}
+                  keyboardType="email-address"
+                />
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    value={state.password}
+                    onChangeText={passwordHandler}
+                    placeholder="Пароль"
+                    placeholderTextColor="#BDBDBD"
+                    secureTextEntry={hidePassword}
+                    style={styles.passwordInput}
+                    onFocus={() => {
+                      setIsShowKeyboard(true);
+                      setIsPasswordFocus(true);
+                    }}
+                    onBlur={() => {
+                      setIsPasswordFocus(false);
+                      setIsShowKeyboard(false);
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={toggleShowPassword}
+                    style={styles.toggleButton}
+                  >
+                    <Text style={styles.toggleText}>
+                      {hidePassword ? "Сховати" : "Показати"}
                     </Text>
-                  </Text>
+                  </TouchableOpacity>
                 </View>
-              )}
+                </View>
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  style={styles.buttonRg}
+                >
+                  <Text style={styles.buttonText}>Зареєстуватися</Text>
+                </TouchableOpacity>
+                <Text
+                  style={styles.textQ}
+                  onPress={() => navigation.navigate("LoginScreen")}
+                >
+                  Вже є акаунт?{" "}
+                  <Text
+                    style={{ textDecorationLine: "underline" }}
+                    onPress={() => {
+                      handleDefaultNavigation();
+                    }}
+                  >
+                    Увійти
+                  </Text>
+                </Text>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
-};
+}
+const screenSize = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  bg: {
+    top: 0,
+    position: "absolute",
+    height: screenSize.height,
+    width: screenSize.width,
   },
 
   keyboardAvoidingContainer: {
@@ -356,5 +391,3 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
-
-export default RegistrationScreen;

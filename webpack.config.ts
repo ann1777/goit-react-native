@@ -1,7 +1,7 @@
-import { Configuration } from "@expo/webpack-config";
-import createExpoWebpackConfigAsync from "@expo/webpack-config/webpack";
+import createExpoWebpackConfigAsync from '@expo/webpack-config';
+import { Configuration } from 'webpack';
 
-export default async function (_, argv) {
-  const config: Configuration = await createExpoWebpackConfigAsync(_, argv);
+export default async function (_: any, argv: any): Promise<Configuration> {
+  const config = await createExpoWebpackConfigAsync(_, argv);
   return config;
 }

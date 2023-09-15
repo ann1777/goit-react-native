@@ -1,4 +1,5 @@
-import "ts-node/register";
-import appConfig from "./app.config.ts";
-
-export default appConfig;
+const config = {
+    name: "my-app",
+    slug: "my-app",
+};
+export default config;
