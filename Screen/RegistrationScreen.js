@@ -1,9 +1,23 @@
-import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import React, { useEffect, useState } from "react";
-import { Animated, Dimensions, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, } from "react-native";
-import ScreenBG from "../assets/img/ScreenBG.png";
-import AddButtonSvg from "../assets/svg/svgAddButton.jsx";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  Image,
+  ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import backgroundImg from "../assets/ScreenBG.png";
+import SvgAddButton from "../assets/svg/svgAddButton";
+
 const initialState = {
     login: "",
     email: "",
@@ -11,101 +25,152 @@ const initialState = {
     isPasswordFocus: false,
 };
 export default function RegistrationScreen() {
-    const [state, setState] = useState(initialState);
-    const [isAvatar, setAvatar] = useState(false);
-    const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-    const [hidePassword, setHidePassword] = useState(true);
-    const [position, setPosition] = useState(new Animated.Value(50));
-    const [shift, setShift] = useState(false);
-    const navigation = useNavigation();
-    useEffect(() => {
-        const listenerShow = Keyboard.addListener("keyboardDidShow", () => {
-            setShift(true);
-        });
-        const listenerHide = Keyboard.addListener("keyboardDidHide", () => {
-            setShift(false);
-        });
-        return () => {
-            listenerShow.remove();
-            listenerHide.remove();
-        };
-    }, []);
-    useEffect(() => {
-        Animated.timing(position, {
-            toValue: shift ? 130 : 50,
-            duration: 300,
-            useNativeDriver: false,
-        }).start();
-    }, [shift]);
-    const handleDefaultNavigation = () => {
-        navigation.navigate("LoginScreen");
-    };
-    const [loaded] = useFonts({
-        "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-        "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-        "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-    });
-    if (!loaded) {
-        return null;
-    }
-    const loginHandler = (value) => {
-        setState((prevState) => (Object.assign(Object.assign({}, prevState), { login: value })));
-    };
-    const emailHandler = (value) => {
-        setState((prevState) => (Object.assign(Object.assign({}, prevState), { email: value })));
-    };
-    const passwordHandler = (value) => {
-        setState((prevState) => (Object.assign(Object.assign({}, prevState), { password: value })));
-    };
-    const toggleShowPassword = () => {
-        setHidePassword(!hidePassword);
-    };
-    const setIsPasswordFocus = (value) => {
-        setState((prevState) => (Object.assign(Object.assign({}, prevState), { isPasswordFocus: value })));
-    };
-    const handleSubmit = () => {
-        keyboardHide();
-        setState(initialState);
-    };
-    const keyboardHide = () => {
-        setIsShowKeyboard(false);
-        Keyboard.dismiss();
-    };
-    return (React.createElement(TouchableWithoutFeedback, { onPress: keyboardHide },
-        React.createElement(View, { style: styles.container },
-            React.createElement(ImageBackground, { source: ScreenBG, style: styles.imageBg },
-                React.createElement(View, { style: styles.formWrap },
-                    React.createElement(KeyboardAvoidingView, { behavior: Platform.OS === "ios" ? "padding" : "height", style: styles.keyboardAvoidingContainer },
-                        React.createElement(View, { style: styles.avatarWrapper },
-                            React.createElement(Image, { style: styles.avatar }),
-                            React.createElement(TouchableOpacity, { style: isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar },
-                                React.createElement(AddButtonSvg, { style: isAvatar
-                                        ? styles.btnAddAvatarSvgLoad
-                                        : styles.btnAddAvatarSvg }))),
-                        React.createElement(Text, { style: styles.title }, "\u0420\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u044F"),
-                        React.createElement(View, { style: styles.inputsContainer },
-                            React.createElement(TextInput, { key: "login", value: state.login, onChangeText: loginHandler, placeholder: "\u041B\u043E\u0433\u0456\u043D", style: styles.input }),
-                            React.createElement(TextInput, { key: "email", value: state.email, onChangeText: emailHandler, placeholder: "\u0410\u0434\u0440\u0435\u0441\u0430 \u0435\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0457 \u043F\u043E\u0448\u0442\u0438", style: styles.input, keyboardType: "email-address" }),
-                            React.createElement(View, { style: styles.passwordContainer },
-                                React.createElement(TextInput, { value: state.password, onChangeText: passwordHandler, placeholder: "\u041F\u0430\u0440\u043E\u043B\u044C", placeholderTextColor: "#BDBDBD", secureTextEntry: hidePassword, style: styles.passwordInput, onFocus: () => {
-                                        setIsShowKeyboard(true);
-                                        setIsPasswordFocus(true);
-                                    }, onBlur: () => {
-                                        setIsPasswordFocus(false);
-                                        setIsShowKeyboard(false);
-                                    } }),
-                                React.createElement(TouchableOpacity, { onPress: toggleShowPassword, style: styles.toggleButton },
-                                    React.createElement(Text, { style: styles.toggleText }, hidePassword ? "Сховати" : "Показати")))),
-                        React.createElement(TouchableOpacity, { onPress: handleSubmit, style: styles.buttonRg },
-                            React.createElement(Text, { style: styles.buttonText }, "\u0417\u0430\u0440\u0435\u0454\u0441\u0442\u0443\u0432\u0430\u0442\u0438\u0441\u044F")),
-                        React.createElement(Text, { style: styles.textQ, onPress: () => navigation.navigate("LoginScreen") },
-                            "\u0412\u0436\u0435 \u0454 \u0430\u043A\u0430\u0443\u043D\u0442?",
-                            " ",
-                            React.createElement(Text, { style: { textDecorationLine: "underline" }, onPress: () => {
-                                    handleDefaultNavigation();
-                                } }, "\u0423\u0432\u0456\u0439\u0442\u0438"))))))));
+  const screenSize = Dimensions.get("screen");
+  const [state, setState] = useState(initialState);
+  const [isAvatar, setAvatar] = useState(false);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState({ 1: false, 2: false, 3: false });
+
+  const [loaded] = useFonts({
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
+  const loginHandler = (value) => {
+    setState((prevState) => ({ ...prevState, login: value }));
+  };
+
+  const emailHandler = (value) => {
+    setState((prevState) => ({ ...prevState, email: value }));
+  };
+
+  const passwordHandler = (value) => {
+    setState((prevState) => ({ ...prevState, password: value }));
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const setIsPasswordFocus = (value) => {
+    setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
+  };
+
+  const handleSubmit = () => {
+    keyboardHide();
+    setState(initialState);
+  };
+
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  function onFocusHandler(e: any) {
+    setIsFocused({ ...isFocused, ...e });
+  }
+
+  return (
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={styles.container}>
+        <ImageBackground source={backgroundImg} style={styles.imageBg}>
+          <View style={styles.formWrap}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={styles.keyboardAvoidingContainer}
+            >
+              <View style={styles.avatarWrapper}>
+                <Image style={styles.avatar} />
+                <TouchableOpacity
+                  style={
+                    isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
+                  }
+                >
+                  <SvgAddButton
+                    style={
+                      isAvatar
+                        ? styles.btnAddAvatarSvgLoad
+                        : styles.btnAddAvatarSvg
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.title}>Реєстрація</Text>
+              <TextInput
+                key="login"
+                value={state.login}
+                onChangeText={loginHandler}
+                placeholder="Логін"
+                style={[styles.input, isFocused[1] && styles.isFocused]}
+                onFocus={() => onFocusHandler({ 1: true })}
+                onBlur={() => onFocusHandler({ 1: false })}
+              />
+              <TextInput
+                key="email"
+                value={state.email}
+                onChangeText={emailHandler}
+                placeholder="Адреса електронної пошти"
+                style={[styles.input, isFocused[2] && styles.isFocused]}
+                keyboardType="email-address"
+                onFocus={() => onFocusHandler({ 2: true })}
+                onBlur={() => onFocusHandler({ 2: false })}
+              />
+              <View
+                key="passwd"
+                style={[
+                  styles.passwordContainer,
+                  isFocused[3] && styles.isFocused,
+                ]}
+              >
+                <TextInput
+                  value={state.password}
+                  onChangeText={passwordHandler}
+                  placeholder="Пароль"
+                  placeholderTextColor={"#BDBDBD"}
+                  secureTextEntry={!showPassword}
+                  style={styles.passwordInput}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                    setIsPasswordFocus(true);
+                    onFocusHandler({ 3: true });
+                  }}
+                  onBlur={() => {
+                    setIsPasswordFocus(false);
+                    setIsShowKeyboard(false);
+                    onFocusHandler({ 3: false });
+                  }}
+                />
+                <Pressable
+                  onPress={toggleShowPassword}
+                  style={styles.toggleButton}
+                >
+                  <Text style={styles.toggleText}>
+                    {showPassword ? "Сховати" : "Показати"}
+                  </Text>
+                </Pressable>
+              </View>
+              {!isShowKeyboard && (
+                <View>
+                  <Pressable onPress={handleSubmit} style={styles.buttonRg}>
+                    <Text style={styles.buttonText}>Зареєстуватися</Text>
+                  </Pressable>
+                  <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
+                </View>
+              )}
+            </KeyboardAvoidingView>
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 }
-const screenSize = Dimensions.get("screen");
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -113,8 +178,8 @@ const styles = StyleSheet.create({
     bg: {
         top: 0,
         position: "absolute",
-        height: screenSize.height,
-        width: screenSize.width,
+        height: this.screenSize.height,
+        width: this.screenSize.width,
     },
     keyboardAvoidingContainer: {
         flex: 1,
