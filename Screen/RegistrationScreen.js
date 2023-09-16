@@ -1,185 +1,171 @@
-import { useFonts } from "expo-font";
-import React, { useState } from "react";
-import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import backgroundImg from "../assets/ScreenBG.png";
-import SvgAddButton from "../assets/svg/svgAddButton";
-
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const native_1 = require("@react-navigation/native");
+const expo_font_1 = require("expo-font");
+const react_1 = __importStar(require("react"));
+const react_native_1 = require("react-native");
+const react_native_gesture_handler_1 = require("react-native-gesture-handler");
+const svgAddButton_1 = __importDefault(require("svgAddButton"));
+const ScreenBG_png_1 = __importDefault(require("../assets/img/ScreenBG.png"));
 const initialState = {
     login: "",
     email: "",
     password: "",
     isPasswordFocus: false,
 };
-export default function RegistrationScreen() {
-  const screenSize = Dimensions.get("screen");
-  const [state, setState] = useState(initialState);
-  const [isAvatar, setAvatar] = useState(false);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isFocused, setIsFocused] = useState({ 1: false, 2: false, 3: false });
-
-  const [loaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
-
-  const loginHandler = (value) => {
-    setState((prevState) => ({ ...prevState, login: value }));
-  };
-
-  const emailHandler = (value) => {
-    setState((prevState) => ({ ...prevState, email: value }));
-  };
-
-  const passwordHandler = (value) => {
-    setState((prevState) => ({ ...prevState, password: value }));
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
-
-  const setIsPasswordFocus = (value) => {
-    setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
-  };
-
-  const handleSubmit = () => {
-    keyboardHide();
-    setState(initialState);
-  };
-
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
-
-  function onFocusHandler(e: any) {
-    setIsFocused({ ...isFocused, ...e });
-  }
-
-  return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
-        <ImageBackground source={backgroundImg} style={styles.imageBg}>
-          <View style={styles.formWrap}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={styles.keyboardAvoidingContainer}
-            >
-              <View style={styles.avatarWrapper}>
-                <Image style={styles.avatar} />
-                <TouchableOpacity
-                  style={
-                    isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
-                  }
-                >
-                  <SvgAddButton
-                    style={
-                      isAvatar
-                        ? styles.btnAddAvatarSvgLoad
-                        : styles.btnAddAvatarSvg
-                    }
-                  />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.title}>Реєстрація</Text>
-              <TextInput
-                key="login"
-                value={state.login}
-                onChangeText={loginHandler}
-                placeholder="Логін"
-                style={[styles.input, isFocused[1] && styles.isFocused]}
-                onFocus={() => onFocusHandler({ 1: true })}
-                onBlur={() => onFocusHandler({ 1: false })}
-              />
-              <TextInput
-                key="email"
-                value={state.email}
-                onChangeText={emailHandler}
-                placeholder="Адреса електронної пошти"
-                style={[styles.input, isFocused[2] && styles.isFocused]}
-                keyboardType="email-address"
-                onFocus={() => onFocusHandler({ 2: true })}
-                onBlur={() => onFocusHandler({ 2: false })}
-              />
-              <View
-                key="passwd"
-                style={[
-                  styles.passwordContainer,
-                  isFocused[3] && styles.isFocused,
-                ]}
-              >
-                <TextInput
-                  value={state.password}
-                  onChangeText={passwordHandler}
-                  placeholder="Пароль"
-                  placeholderTextColor={"#BDBDBD"}
-                  secureTextEntry={!showPassword}
-                  style={styles.passwordInput}
-                  onFocus={() => {
-                    setIsShowKeyboard(true);
-                    setIsPasswordFocus(true);
-                    onFocusHandler({ 3: true });
-                  }}
-                  onBlur={() => {
-                    setIsPasswordFocus(false);
-                    setIsShowKeyboard(false);
-                    onFocusHandler({ 3: false });
-                  }}
-                />
-                <Pressable
-                  onPress={toggleShowPassword}
-                  style={styles.toggleButton}
-                >
-                  <Text style={styles.toggleText}>
-                    {showPassword ? "Сховати" : "Показати"}
-                  </Text>
-                </Pressable>
-              </View>
-              {!isShowKeyboard && (
-                <View>
-                  <Pressable onPress={handleSubmit} style={styles.buttonRg}>
-                    <Text style={styles.buttonText}>Зареєстуватися</Text>
-                  </Pressable>
-                  <Text style={styles.textQ}>Вже є акаунт? Увійти</Text>
-                </View>
-              )}
-            </KeyboardAvoidingView>
-          </View>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
-  );
+function RegistrationScreen({ onRegister, }) {
+    const [state, setState] = (0, react_1.useState)(initialState);
+    const [isAvatar, setAvatar] = (0, react_1.useState)(false);
+    const [isShowKeyboard, setIsShowKeyboard] = (0, react_1.useState)(false);
+    const [hidePassword, setHidePassword] = (0, react_1.useState)(true);
+    const [position, setPosition] = (0, react_1.useState)(new react_native_1.Animated.Value(50));
+    const [shift, setShift] = (0, react_1.useState)(false);
+    const navigation = (0, native_1.useNavigation)();
+    (0, react_1.useEffect)(() => {
+        const listenerShow = react_native_1.Keyboard.addListener("keyboardDidShow", () => {
+            setShift(true);
+        });
+        const listenerHide = react_native_1.Keyboard.addListener("keyboardDidHide", () => {
+            setShift(false);
+        });
+        return () => {
+            listenerShow.remove();
+            listenerHide.remove();
+        };
+    }, []);
+    (0, react_1.useEffect)(() => {
+        react_native_1.Animated.timing(position, {
+            toValue: shift ? 130 : 50,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    }, [shift]);
+    const handleDefaultNavigation = () => {
+        navigation.navigate("LoginScreen");
+    };
+    const [loaded] = (0, expo_font_1.useFonts)({
+        "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+        "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+        "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+    });
+    if (!loaded) {
+        return null;
+    }
+    const loginHandler = (value) => {
+        setState((prevState) => ({ ...prevState, login: value }));
+    };
+    const emailHandler = (value) => {
+        setState((prevState) => ({ ...prevState, email: value }));
+    };
+    const passwordHandler = (value) => {
+        setState((prevState) => ({ ...prevState, password: value }));
+    };
+    const toggleShowPassword = () => {
+        setHidePassword(!hidePassword);
+    };
+    const setIsPasswordFocus = (value) => {
+        setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
+    };
+    const handleSubmit = () => {
+        keyboardHide();
+        const { login, email, password } = state;
+        if (!login || !email || !password) {
+            console.error("Please fill in all required fields!");
+            return;
+        }
+        console.log("Submitting form data:", { login, email, password });
+        setState(initialState);
+    };
+    const keyboardHide = () => {
+        setIsShowKeyboard(false);
+        react_native_1.Keyboard.dismiss();
+    };
+    return (<react_native_gesture_handler_1.TouchableWithoutFeedback onPress={keyboardHide}>
+      <react_native_1.View style={styles.container}>
+        <react_native_1.ImageBackground source={ScreenBG_png_1.default} style={styles.imageBg}>
+          <react_native_1.View style={styles.formWrap}>
+            <react_native_1.KeyboardAvoidingView behavior={react_native_1.Platform.OS === "ios" ? "padding" : undefined} style={styles.keyboardAvoidingContainer}>
+              <react_native_1.View style={styles.avatarWrapper}>
+                <react_native_1.Image style={styles.avatar}/>
+                <react_native_1.TouchableOpacity style={isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar}>
+                  <svgAddButton_1.default style={isAvatar
+            ? styles.btnAddAvatarSvgLoad
+            : styles.btnAddAvatarSvg}/>
+                </react_native_1.TouchableOpacity>
+              </react_native_1.View>
+              <react_native_1.Text style={styles.title}>Реєстрація</react_native_1.Text>
+              <react_native_1.View style={styles.inputsContainer}>
+                <react_native_1.TextInput key="login" value={state.login} onChangeText={loginHandler} placeholder="Логін" style={styles.input}/>
+                <react_native_1.TextInput key="email" value={state.email} onChangeText={emailHandler} placeholder="Адреса електронної пошти" style={styles.input} keyboardType="email-address"/>
+                <react_native_1.View style={styles.passwordContainer}>
+                  <react_native_1.TextInput value={state.password} onChangeText={passwordHandler} placeholder="Пароль" placeholderTextColor="#BDBDBD" secureTextEntry={hidePassword} style={styles.passwordInput} onFocus={() => {
+            setIsShowKeyboard(true);
+            setIsPasswordFocus(true);
+        }} onBlur={() => {
+            setIsPasswordFocus(false);
+            setIsShowKeyboard(false);
+        }}/>
+                  <react_native_1.TouchableOpacity onPress={toggleShowPassword} style={styles.toggleButton}>
+                    <react_native_1.Text style={styles.toggleText}>
+                      {hidePassword ? "Сховати" : "Показати"}
+                    </react_native_1.Text>
+                  </react_native_1.TouchableOpacity>
+                </react_native_1.View>
+              </react_native_1.View>
+              <react_native_1.TouchableOpacity onPress={handleSubmit} style={styles.buttonRg}>
+                <react_native_1.Text style={styles.buttonText}>Зареєстуватися</react_native_1.Text>
+              </react_native_1.TouchableOpacity>
+              <react_native_1.Text style={styles.textQ} onPress={() => navigation.navigate("LoginScreen")}>
+                Вже є акаунт?{" "}
+                <react_native_1.Text style={{ textDecorationLine: "underline" }} onPress={() => {
+            handleDefaultNavigation();
+        }}>
+                  Увійти
+                </react_native_1.Text>
+              </react_native_1.Text>
+            </react_native_1.KeyboardAvoidingView>
+          </react_native_1.View>
+        </react_native_1.ImageBackground>
+      </react_native_1.View>
+    </react_native_gesture_handler_1.TouchableWithoutFeedback>);
 }
-
-const styles = StyleSheet.create({
+exports.default = RegistrationScreen;
+const screenSize = react_native_1.Dimensions.get("screen");
+const styles = react_native_1.StyleSheet.create({
     container: {
         flex: 1,
     },
     bg: {
         top: 0,
         position: "absolute",
-        height: this.screenSize.height,
-        width: this.screenSize.width,
+        height: screenSize.height,
+        width: screenSize.width,
     },
     keyboardAvoidingContainer: {
         flex: 1,

@@ -1,5 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const config = {
     name: "my-app",
     slug: "my-app",
 };
-export default config;
+exports.default = config;

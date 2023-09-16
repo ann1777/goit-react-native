@@ -11,9 +11,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { NavigationInjectedProps, withNavigation } from "react-navigation";
 import ScreenBG from "../assets/img/ScreenBG.png";
 
-interface LoginScreenProps {
+interface LoginScreenProps extends NavigationInjectedProps {
   onLogin: () => void;
 }
 
@@ -23,10 +24,11 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
+const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, navigation }) => {
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const emailHandler = (value: string) => {
     setState((prevState) => ({
@@ -56,6 +58,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const handleSubmit = () => {
     keyboardHide();
     setState(initialState);
+
+    setIsLoggedIn(true);
+
+    if (isLoggedIn) {
+      navigation.navigate("HomeScreen");
+    }
     if (onLogin) {
       onLogin();
     }
@@ -237,4 +245,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default withNavigation(LoginScreen);

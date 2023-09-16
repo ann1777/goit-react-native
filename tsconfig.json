@@ -1,16 +1,20 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "jsx": "react",
-    "esModuleInterop": true,
+    "target": "ESNext",
+    "module": "commonjs",
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "baseUrl": "./",
     "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["react", "react-native"],
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "**/*-e2e.js", "**/*.spec.js", "lib.dom.d.ts"]
+  "paths": {
+    "@components/*": ["Components/*"]
+  },
+  "include": ["**/*.ts", "**/*.tsx", "Components/Navigation.ts"],
+  "exclude": ["node_modules", "**/*-e2e.js", "**/*.spec.js", "lib.dom.d.ts"],
+  "extends": "expo/tsconfig.base"
 }

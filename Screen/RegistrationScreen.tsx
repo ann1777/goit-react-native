@@ -1,3 +1,5 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import {
   Animated,
@@ -14,10 +16,8 @@ import {
   View,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
-import { useFonts } from "expo-font";
+import AddButtonSvg from "svgAddButton";
 import ScreenBG from "../assets/img/ScreenBG.png";
-import AddButtonSvg from "../assets/svg/svgAddButton";
 
 interface RegistrationScreenProps {
   onRegister: () => void;
@@ -30,14 +30,16 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-export default function RegistrationScreen({onRegister}: RegistrationScreenProps) {
+export default function RegistrationScreen({
+  onRegister,
+}: RegistrationScreenProps) {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const [position, setPosition] = useState(new Animated.Value(50));
   const [shift, setShift] = useState(false);
-  const navigation = useNavigation();
+  const navigation: NavigationProp<any> = useNavigation();
   useEffect(() => {
     const listenerShow = Keyboard.addListener("keyboardDidShow", () => {
       setShift(true);
@@ -93,11 +95,16 @@ export default function RegistrationScreen({onRegister}: RegistrationScreenProps
     setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     keyboardHide();
+    const { login, email, password } = state;
+
+    if (!login || !email || !password) {
+      console.error("Please fill in all required fields!");
+      return;
+    }
+    console.log("Submitting form data:", { login, email, password });
     setState(initialState);
-    onRegister();
   };
 
   const keyboardHide = () => {
@@ -111,7 +118,7 @@ export default function RegistrationScreen({onRegister}: RegistrationScreenProps
         <ImageBackground source={ScreenBG} style={styles.imageBg}>
           <View style={styles.formWrap}>
             <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
               style={styles.keyboardAvoidingContainer}
             >
               <View style={styles.avatarWrapper}>
@@ -173,27 +180,24 @@ export default function RegistrationScreen({onRegister}: RegistrationScreenProps
                     </Text>
                   </TouchableOpacity>
                 </View>
-                </View>
-                <TouchableOpacity
-                  onPress={handleSubmit}
-                  style={styles.buttonRg}
-                >
-                  <Text style={styles.buttonText}>Зареєстуватися</Text>
-                </TouchableOpacity>
+              </View>
+              <TouchableOpacity onPress={handleSubmit} style={styles.buttonRg}>
+                <Text style={styles.buttonText}>Зареєстуватися</Text>
+              </TouchableOpacity>
+              <Text
+                style={styles.textQ}
+                onPress={() => navigation.navigate("LoginScreen")}
+              >
+                Вже є акаунт?{" "}
                 <Text
-                  style={styles.textQ}
-                  onPress={() => navigation.navigate("LoginScreen")}
+                  style={{ textDecorationLine: "underline" }}
+                  onPress={() => {
+                    handleDefaultNavigation();
+                  }}
                 >
-                  Вже є акаунт?{" "}
-                  <Text
-                    style={{ textDecorationLine: "underline" }}
-                    onPress={() => {
-                      handleDefaultNavigation();
-                    }}
-                  >
-                    Увійти
-                  </Text>
+                  Увійти
                 </Text>
+              </Text>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
