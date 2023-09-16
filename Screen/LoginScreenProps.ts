@@ -1,9 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../Components/Navigation";
+import { RootStackParamList } from "../Components/Navigation.js";
 
-interface LoginScreenProps {
+export interface LoginScreenProps {
   onLogin?: () => void;
   navigation: StackNavigationProp<RootStackParamList, "RegistrationScreen">;
 }
-
-export default LoginScreenProps;

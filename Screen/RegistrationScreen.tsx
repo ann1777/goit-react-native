@@ -1,5 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
-import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import {
   Animated,
@@ -8,15 +6,18 @@ import {
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 import ScreenBG from "../assets/img/ScreenBG.png";
-import AddButtonSvg from "../assets/svg/svgAddButton.jsx";
+import AddButtonSvg from "../assets/svg/svgAddButton";
 
 interface RegistrationScreenProps {
   onRegister: () => void;
