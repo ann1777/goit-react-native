@@ -29,6 +29,7 @@ export default function RegistrationScreen() {
   const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState({ 1: false, 2: false, 3: false });
 
   const [loaded] = useFonts({
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
@@ -70,6 +71,10 @@ export default function RegistrationScreen() {
     Keyboard.dismiss();
   };
 
+  function onFocusHandler(e: any) {
+    setIsFocused({ ...isFocused, ...e });
+  }
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
@@ -101,17 +106,27 @@ export default function RegistrationScreen() {
                 value={state.login}
                 onChangeText={loginHandler}
                 placeholder="Логін"
-                style={styles.input}
+                style={[styles.input, isFocused[1] && styles.isFocused]}
+                onFocus={() => onFocusHandler({ 1: true })}
+                onBlur={() => onFocusHandler({ 1: false })}
               />
               <TextInput
                 key="email"
                 value={state.email}
                 onChangeText={emailHandler}
                 placeholder="Адреса електронної пошти"
-                style={styles.input}
+                style={[styles.input, isFocused[2] && styles.isFocused]}
                 keyboardType="email-address"
+                onFocus={() => onFocusHandler({ 2: true })}
+                onBlur={() => onFocusHandler({ 2: false })}
               />
-              <View style={styles.passwordContainer}>
+              <View
+                key="passwd"
+                style={[
+                  styles.passwordContainer,
+                  isFocused[3] && styles.isFocused,
+                ]}
+              >
                 <TextInput
                   value={state.password}
                   onChangeText={passwordHandler}
@@ -122,10 +137,12 @@ export default function RegistrationScreen() {
                   onFocus={() => {
                     setIsShowKeyboard(true);
                     setIsPasswordFocus(true);
+                    onFocusHandler({ 3: true });
                   }}
                   onBlur={() => {
                     setIsPasswordFocus(false);
                     setIsShowKeyboard(false);
+                    onFocusHandler({ 3: false });
                   }}
                 />
                 <Pressable
@@ -261,6 +278,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(246, 246, 246, 1)",
     marginBottom: 16,
     paddingLeft: 16,
+  },
+
+  isFocused: {
+    borderColor: "1px solid rgba(255, 108, 0, 1)",
+    backgroundColor: "#ffffff",
   },
 
   passwordContainer: {
