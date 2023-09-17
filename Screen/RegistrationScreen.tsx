@@ -1,10 +1,4 @@
-import {
-  NavigationProp,
-  StackNavigationProp,
-  useNavigation,
-} from "@react-navigation/stack";
-import { RootStackParamList } from "Components/Navigation";
-
+import { NavigationProp } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import {
@@ -20,14 +14,14 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from "react-native"; // Import ScrollView here
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Svg, { Path } from "react-native-svg";
-import ScreenBG from "../assets/img/ScreenBG.png";
+import { RootStackParamList } from "./Navigation";
 
 interface RegistrationScreenProps {
   onRegister: () => void;
-  navigation: StackNavigationProp<RootStackParamList, "LoginScreen">;
+  navigation: NavigationProp<RootStackParamList, "LoginScreen">;
 }
 
 const initialState = {
@@ -36,8 +30,15 @@ const initialState = {
   password: "",
   isPasswordFocus: false,
 };
-
-const IconAdd = ({ width, height, fill }) => (
+const IconAdd = ({
+  width,
+  height,
+  fill,
+}: {
+  width: number;
+  height: number;
+  fill: string;
+}) => (
   <Svg width={width} height={height} viewBox="0 0 24 24">
     <Path
       fill={fill}
@@ -48,6 +49,7 @@ const IconAdd = ({ width, height, fill }) => (
 
 const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   onRegister,
+  navigation,
 }) => {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
@@ -55,7 +57,7 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   const [hidePassword, setHidePassword] = useState(true);
   const [position, setPosition] = useState(new Animated.Value(50));
   const [shift, setShift] = useState(false);
-  const navigation: NavigationProp<any> = useNavigation();
+
   useEffect(() => {
     const listenerShow = Keyboard.addListener("keyboardDidShow", () => {
       setShift(true);
@@ -144,16 +146,7 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
                     isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
                   }
                 >
-                  <IconAdd
-                    width={25}
-                    height={25}
-                    fill="#ff6c00"
-                    style={
-                      isAvatar
-                        ? styles.btnAddAvatarSvgLoad
-                        : styles.btnAddAvatarSvg
-                    }
-                  />
+                  <IconAdd width={25} height={25} fill="#ff6c00" />
                 </TouchableOpacity>
               </View>
               <Text style={styles.title}>Реєстрація</Text>
@@ -224,7 +217,9 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
     </TouchableWithoutFeedback>
   );
 };
-const screenSize = Dimensions.get("screen");
+export default RegistrationScreen;
+
+const screenSize = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
@@ -236,184 +231,73 @@ const styles = StyleSheet.create({
     height: screenSize.height,
     width: screenSize.width,
   },
-
-  keyboardAvoidingContainer: {
-    flex: 1,
-  },
-
-  imageBg: {
-    flex: 1,
-    top: 0,
-    height: "100%",
-    width: "100%",
-    resizeMode: "cover",
-    justifyContent: "center",
-  },
-
-  formWrap: {
-    top: "19%",
-    width: "100%",
-    height: "67.61%",
-    paddingHorizontal: 16,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: "rgba(255, 255, 255, 1)",
-  },
-
-  avatarWrapper: {
+  avatarThumb: {
+    width: 120,
+    height: 120,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
     position: "absolute",
     top: -60,
-    alignSelf: "center",
-    width: 120,
-    height: 120,
-    backgroundColor: "rgba(246, 246, 246, 1)",
-    borderRadius: 16,
   },
-
-  avatar: {
-    width: 120,
-    height: 120,
-  },
-  btnAddAvatar: {
-    position: "absolute",
-    bottom: 14,
-    right: -12.5,
-
-    alignItems: "center",
-    alignContent: "center",
-
-    width: 25,
-    height: 25,
-
-    color: "#ff6c00",
-    backgroundColor: "#ffffff",
-    borderRadius: 50,
-  },
-
-  btnAddAvatarLoad: {
-    position: "absolute",
-    bottom: 14,
-    right: -12.5,
-
-    alignItems: "center",
-    alignContent: "center",
-
-    width: 25,
-    height: 25,
-
-    color: "#ff6c00",
-    backgroundColor: "#ffffff",
-    borderRadius: 50,
-
-    transform: [{ rotate: "45deg" }],
-  },
-  btnAddAvatarSvg: {
-    fill: "#ff6c00",
-    stroke: "#ff6c00",
-    backgroundColor: "#ffffff",
-  },
-  btnAddAvatarSvgLoad: {
-    fill: "#bdbdbd",
-    stroke: "#e8e8e8",
-    backgroundColor: "#ffffff",
-  },
-
   title: {
-    paddingTop: 32,
-    marginTop: 52,
-    marginBottom: 32,
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Roboro-Medium",
     fontSize: 30,
-    fontWeight: "bold",
-    lineHeight: 35.16,
-    letterSpacing: 1,
-    textAlign: "center",
-    color: "rgba(33, 33, 33, 1)",
-    // marginBottom: 16,
+    color: "#212121",
+    marginBottom: 33,
   },
-
+  inputsContainer: { gap: 16, width: "100%", alignItems: "center" },
   input: {
-    height: 50,
+    padding: 15,
+    backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "rgba(232, 232, 232, 1)",
-    backgroundColor: "rgba(246, 246, 246, 1)",
-    marginBottom: 16,
-    paddingLeft: 16,
-  },
-
-  passwordContainer: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "rgba(232, 232, 232, 1)",
-    backgroundColor: "rgba(246, 246, 246, 1)",
-    marginBottom: 16,
-    paddingLeft: 16,
-    paddingRight: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  passwordInput: {
-    flex: 1,
+    borderRadius: 10,
+    borderColor: "#E8E8E8",
+    width: 343,
     height: 50,
     fontSize: 16,
-    fontFamily: "Roboto-Regular",
-    fontWeight: "normal",
-    lineHeight: 18.75,
+    fontFamily: "Roboro-Regular",
   },
-
-  toggleButton: {
-    padding: 8,
+  inputFocused: {
+    borderColor: "#FF6C00",
   },
-
-  toggleText: {
-    textAlign: "center",
-    paddingHorizontal: 8,
-
-    fontFamily: "Roboto-Regular",
+  inputPasswordShower: {
     fontSize: 16,
-    fontWeight: "normal",
-    lineHeight: 18.75,
-
-    color: "rgba(27, 67, 113, 1)",
+    textAlign: "right",
+    fontFamily: "Roboro-Regular",
+    color: "#1B4371",
+    position: "absolute",
+    bottom: 30,
+    left: 70,
   },
-
-  buttonRg: {
-    fontFamily: "Roboto-Regular",
-    fontSize: 16,
-    fontWeight: "normal",
-    lineHeight: 18.75,
-    textAlign: "center",
-    color: "rgba(255, 255, 255, 1)",
-
+  scrollViewContainer: {
+    minHeight: screenSize.height,
+    justifyContent: "flex-end",
+  },
+  formWrapper: {
+    paddingTop: 92,
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
-    justifyContent: "center",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  button: {
+    width: 343,
     height: 51,
-    padding: 16,
-    borderRadius: 50,
-    marginBottom: 15,
-    backgroundColor: "rgba(255, 108, 0, 1)",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
+    marginTop: 43,
+    marginBottom: 16,
   },
-
   buttonText: {
-    color: "rgba(255, 255, 255, 1)",
+    fontFamily: "Roboro-Regular",
     fontSize: 16,
-    fontWeight: "normal",
-    lineHeight: 18.75,
-    fontFamily: "Roboto-Regular",
+    color: "#fff",
   },
-
-  textQ: {
-    fontFamily: "Roboto-Regular",
+  linkText: {
+    fontFamily: "Roboro-Regular",
     fontSize: 16,
-    fontWeight: "normal",
-    lineHeight: 18.75,
-    textAlign: "center",
-    color: "rgba(27, 67, 113, 1)",
+    color: "#1B4371",
   },
 });
-
-export default RegistrationScreen;

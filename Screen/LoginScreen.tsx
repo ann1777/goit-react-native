@@ -4,7 +4,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -108,15 +107,17 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, navigation }) => {
                       setIsShowKeyboard(false);
                     }}
                   />
-                  <Pressable onPress={toggleShowPassword}>
+                  <TouchableWithoutFeedback onPress={toggleShowPassword}>
                     <Text style={styles.toggleText}>
                       {showPassword ? "Сховати" : "Показати"}
                     </Text>
-                  </Pressable>
+                  </TouchableWithoutFeedback>
                 </View>
-                <Pressable onPress={handleSubmit} style={styles.buttonRg}>
-                  <Text style={styles.buttonText}>Увійти</Text>
-                </Pressable>
+                <TouchableWithoutFeedback onPress={handleSubmit}>
+                  <View style={styles.buttonRg}>
+                    <Text style={styles.buttonText}>Увійти</Text>
+                  </View>
+                </TouchableWithoutFeedback>
                 <Text style={styles.textQ}>
                   Немає акаунту?{" "}
                   <Text
