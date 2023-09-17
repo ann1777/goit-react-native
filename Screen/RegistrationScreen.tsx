@@ -1,4 +1,9 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  StackNavigationProp,
+  useNavigation,
+} from "@react-navigation/stack";
+import { RootStackParamList } from "Components/Navigation";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import {
@@ -16,11 +21,12 @@ import {
   View,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import AddButtonSvg from "svgAddButton";
 import ScreenBG from "../assets/img/ScreenBG.png";
+import { default as SvgAddButton } from "../assets/svg/svgAddButton";
 
 interface RegistrationScreenProps {
   onRegister: () => void;
+  navigation: StackNavigationProp<RootStackParamList, "LoginScreen">;
 }
 
 const initialState = {
@@ -30,9 +36,10 @@ const initialState = {
   isPasswordFocus: false,
 };
 
-export default function RegistrationScreen({
+const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   onRegister,
-}: RegistrationScreenProps) {
+  navigation,
+}) => {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -128,11 +135,11 @@ export default function RegistrationScreen({
                     isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
                   }
                 >
-                  <AddButtonSvg
+                  <SvgAddButton
                     style={
                       isAvatar
                         ? styles.btnAddAvatarSvgLoad
-                        : styles.btnAddAvatarSvg
+                        : { width: 25, height: 25 }
                     }
                   />
                 </TouchableOpacity>
@@ -204,7 +211,7 @@ export default function RegistrationScreen({
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 const screenSize = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
@@ -396,3 +403,5 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
+
+export default RegistrationScreen;
