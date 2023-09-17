@@ -1,42 +1,43 @@
-// import * as React from "react";
-// import { Circle, Path, Svg, SvgProps } from "react-native-svg";
+import React from "react";
+import { ViewStyle } from "react-native";
+import { Circle, Path, Svg } from "react-native-svg";
 
-// interface SvgAddButtonProps {
-//   style?: SvgProps;
-// }
+interface SvgAddButtonProps {
+  style?: ViewStyle;
+  fill?: string;
+  stroke?: string;
+  backgroundColor?: string;
+  width?: number;
+  height?: number;
+}
 
-// const SvgAddButton: React.FC<SvgAddButtonProps> = ({ style = {} }) => {
-//   const {
-//     fill = "#ff6c00",
-//     stroke = "#ff6c00",
-//     backgroundColor = "#ffffff",
-//   } = style;
+const SvgAddButton: React.FC<SvgAddButtonProps> = ({
+  style = {},
+  fill = "#ff6c00",
+  stroke = "#ff6c00",
+  backgroundColor = "#ffffff",
+  width = 25,
+  height = 25,
+}) => {
+  return (
+    <Svg width={width} height={height} fill="none" {...style}>
+      <Circle
+        cx={width / 2}
+        cy={height / 2}
+        r={width / 2}
+        fill={backgroundColor}
+        stroke={stroke}
+      />
+      <Path
+        fill={fill}
+        fillRule="evenodd"
+        d={`M${width / 2} ${height / 4}h-${width / 4}v${height / 2}h${
+          width / 2
+        }v-${height / 2}h-${width / 4}Z`}
+        clipRule="evenodd"
+      />
+    </Svg>
+  );
+};
 
-//   return (
-//     <Svg
-//       xmlns="http://www.w3.org/2000/svg"
-//       width={25}
-//       height={25}
-//       fill="none"
-//       {...style}
-//     >
-//       {" "}
-//       {/* Spread style props */}
-//       <Circle
-//         cx={12.5}
-//         cy={12.5}
-//         r={12}
-//         fill={backgroundColor}
-//         stroke={stroke}
-//       />
-//       <Path
-//         fill={fill}
-//         fillRule="evenodd"
-//         d="M13 6h-1v6H6v1h6v6h1v-6h6v-1h-6V6Z"
-//         clipRule="evenodd"
-//       />
-//     </Svg>
-//   );
-// };
-
-// export default SvgAddButton;
+export default SvgAddButton;

@@ -54,9 +54,7 @@ const expo_font_1 = require("expo-font");
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const react_native_gesture_handler_1 = require("react-native-gesture-handler");
-const svgAddButton_1 = __importDefault(
-  require("../assets/svg/svgAddButton.tsx")
-);
+const iconAdd_1 = __importDefault(require("@assets/svg/iconAdd.js"));
 const ScreenBG_png_1 = __importDefault(require("../assets/img/ScreenBG.png"));
 const initialState = {
   login: "",
@@ -170,7 +168,7 @@ function RegistrationScreen({ onRegister }) {
                     isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
                   }
                 >
-                  <svgAddButton_1.default
+                  <iconAdd_1.default
                     style={
                       isAvatar
                         ? styles.btnAddAvatarSvgLoad

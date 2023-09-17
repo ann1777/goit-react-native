@@ -4,6 +4,7 @@ import {
   useNavigation,
 } from "@react-navigation/stack";
 import { RootStackParamList } from "Components/Navigation";
+
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import {
@@ -21,8 +22,8 @@ import {
   View,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import Svg, { Path } from "react-native-svg";
 import ScreenBG from "../assets/img/ScreenBG.png";
-import { default as SvgAddButton } from "../assets/svg/svgAddButton";
 
 interface RegistrationScreenProps {
   onRegister: () => void;
@@ -36,9 +37,17 @@ const initialState = {
   isPasswordFocus: false,
 };
 
+const IconAdd = ({ width, height, fill }) => (
+  <Svg width={width} height={height} viewBox="0 0 24 24">
+    <Path
+      fill={fill}
+      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-3-9h2V7h2v4h4v2h-4v4h-2v-4H7z"
+    />
+  </Svg>
+);
+
 const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   onRegister,
-  navigation,
 }) => {
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
@@ -135,11 +144,14 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
                     isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
                   }
                 >
-                  <SvgAddButton
+                  <IconAdd
+                    width={25}
+                    height={25}
+                    fill="#ff6c00"
                     style={
                       isAvatar
                         ? styles.btnAddAvatarSvgLoad
-                        : { width: 25, height: 25 }
+                        : styles.btnAddAvatarSvg
                     }
                   />
                 </TouchableOpacity>

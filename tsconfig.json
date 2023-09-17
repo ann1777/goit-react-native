@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "esNext",
     "module": "commonjs",
     "esModuleInterop": true,
     "strict": true,
@@ -13,7 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-native"
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "assets/svg/svgAddButton.jsx"],
   "exclude": ["node_modules", "**/*-e2e.js", "**/*.spec.js", "lib.dom.d.ts"],
   "extends": "expo/tsconfig.base"
 }
