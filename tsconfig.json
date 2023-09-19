@@ -1,19 +1,34 @@
 {
   "compilerOptions": {
-    "target": "esNext",
-    "module": "commonjs",
+    "target": "ES6",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "strict": true,
+    "moduleResolution": "node",
     "skipLibCheck": true,
-    "types": ["react", "react-native"],
     "baseUrl": "./",
     "paths": {
-      "@assets/*": ["assets/*"]
+      "@assets/*": [
+        "assets/*"
+      ]
     },
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "jsx": "react-native"
   },
-  "include": ["**/*.ts", "**/*.tsx", "assets/svg/svgAddButton.jsx"],
-  "exclude": ["node_modules", "**/*-e2e.js", "**/*.spec.js", "lib.dom.d.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "assets/svg/svgAddButton.jsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*-e2e.js",
+    "**/*.spec.js",
+    "lib.dom.d.ts",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ],
   "extends": "expo/tsconfig.base"
 }

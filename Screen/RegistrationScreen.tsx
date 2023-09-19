@@ -1,6 +1,6 @@
-import { NavigationProp } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import React, { useEffect, useState } from "react";
+import SvgAddButton from '@assets/svg/svgAddButton';
+import { useFonts } from 'expo-font';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
   Dimensions,
@@ -14,38 +14,22 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native"; // Import ScrollView here
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import Svg, { Path } from "react-native-svg";
-import { RootStackParamList } from "./Navigation";
+} from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { NavigationInjectedProps, withNavigation } from "react-navigation";
+import ScreenBG from '../assets/img/ScreenBG.png';
 
-interface RegistrationScreenProps {
+interface RegistrationScreenProps extends NavigationInjectedProps {
+  onLogin: () => void;
   onRegister: () => void;
-  navigation: NavigationProp<RootStackParamList, "LoginScreen">;
 }
 
 const initialState = {
-  login: "",
-  email: "",
-  password: "",
+  login: '',
+  email: '',
+  password: '',
   isPasswordFocus: false,
 };
-const IconAdd = ({
-  width,
-  height,
-  fill,
-}: {
-  width: number;
-  height: number;
-  fill: string;
-}) => (
-  <Svg width={width} height={height} viewBox="0 0 24 24">
-    <Path
-      fill={fill}
-      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-3-9h2V7h2v4h4v2h-4v4h-2v-4H7z"
-    />
-  </Svg>
-);
 
 const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   onRegister,
@@ -59,10 +43,10 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   const [shift, setShift] = useState(false);
 
   useEffect(() => {
-    const listenerShow = Keyboard.addListener("keyboardDidShow", () => {
+    const listenerShow = Keyboard.addListener('keyboardDidShow', () => {
       setShift(true);
     });
-    const listenerHide = Keyboard.addListener("keyboardDidHide", () => {
+    const listenerHide = Keyboard.addListener('keyboardDidHide', () => {
       setShift(false);
     });
     return () => {
@@ -80,13 +64,13 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   }, [shift]);
 
   const handleDefaultNavigation = () => {
-    navigation.navigate("LoginScreen");
+    navigation.navigate('LoginScreen');
   };
 
   const [loaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+    'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+    'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
+    'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
   });
 
   if (!loaded) {
@@ -94,15 +78,15 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   }
 
   const loginHandler = (value: string) => {
-    setState((prevState) => ({ ...prevState, login: value }));
+    setState(prevState => ({...prevState, login: value}));
   };
 
   const emailHandler = (value: string) => {
-    setState((prevState) => ({ ...prevState, email: value }));
+    setState(prevState => ({...prevState, email: value}));
   };
 
   const passwordHandler = (value: string) => {
-    setState((prevState) => ({ ...prevState, password: value }));
+    setState(prevState => ({...prevState, password: value}));
   };
 
   const toggleShowPassword = () => {
@@ -110,18 +94,18 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
   };
 
   const setIsPasswordFocus = (value: boolean) => {
-    setState((prevState) => ({ ...prevState, isPasswordFocus: value }));
+    setState(prevState => ({...prevState, isPasswordFocus: value}));
   };
 
   const handleSubmit = () => {
     keyboardHide();
-    const { login, email, password } = state;
+    const {login, email, password} = state;
 
     if (!login || !email || !password) {
-      console.error("Please fill in all required fields!");
+      console.error('Please fill in all required fields!');
       return;
     }
-    console.log("Submitting form data:", { login, email, password });
+    console.log('Submitting form data:', {login, email, password});
     setState(initialState);
   };
 
@@ -136,17 +120,15 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
         <ImageBackground source={ScreenBG} style={styles.imageBg}>
           <View style={styles.formWrap}>
             <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : undefined}
-              style={styles.keyboardAvoidingContainer}
-            >
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+              style={styles.keyboardAvoidingContainer}>
               <View style={styles.avatarWrapper}>
                 <Image style={styles.avatar} />
                 <TouchableOpacity
                   style={
                     isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
-                  }
-                >
-                  <IconAdd width={25} height={25} fill="#ff6c00" />
+                  }>
+                  <SvgAddButton width={25} height={25} fill="#ff6c00" />
                 </TouchableOpacity>
               </View>
               <Text style={styles.title}>Реєстрація</Text>
@@ -185,10 +167,9 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
                   />
                   <TouchableOpacity
                     onPress={toggleShowPassword}
-                    style={styles.toggleButton}
-                  >
+                    style={styles.toggleButton}>
                     <Text style={styles.toggleText}>
-                      {hidePassword ? "Сховати" : "Показати"}
+                      {hidePassword ? 'Сховати' : 'Показати'}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -198,15 +179,13 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
               </TouchableOpacity>
               <Text
                 style={styles.textQ}
-                onPress={() => navigation.navigate("LoginScreen")}
-              >
-                Вже є акаунт?{" "}
+                onPress={() => navigation.navigate('LoginScreen')}>
+                Вже є акаунт?{' '}
                 <Text
-                  style={{ textDecorationLine: "underline" }}
+                  style={{textDecorationLine: 'underline'}}
                   onPress={() => {
                     handleDefaultNavigation();
-                  }}
-                >
+                  }}>
                   Увійти
                 </Text>
               </Text>
@@ -217,9 +196,8 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
     </TouchableWithoutFeedback>
   );
 };
-export default RegistrationScreen;
 
-const screenSize = Dimensions.get("window");
+const screenSize = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -227,77 +205,78 @@ const styles = StyleSheet.create({
   },
   bg: {
     top: 0,
-    position: "absolute",
+    position: 'absolute',
     height: screenSize.height,
     width: screenSize.width,
   },
   avatarThumb: {
     width: 120,
     height: 120,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: '#F6F6F6',
     borderRadius: 16,
-    position: "absolute",
+    position: 'absolute',
     top: -60,
   },
   title: {
-    fontFamily: "Roboro-Medium",
+    fontFamily: 'Roboro-Medium',
     fontSize: 30,
-    color: "#212121",
+    color: '#212121',
     marginBottom: 33,
   },
-  inputsContainer: { gap: 16, width: "100%", alignItems: "center" },
+  inputsContainer: {gap: 16, width: '100%', alignItems: 'center'},
   input: {
     padding: 15,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: '#F6F6F6',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: "#E8E8E8",
+    borderColor: '#E8E8E8',
     width: 343,
     height: 50,
     fontSize: 16,
-    fontFamily: "Roboro-Regular",
+    fontFamily: 'Roboro-Regular',
   },
   inputFocused: {
-    borderColor: "#FF6C00",
+    borderColor: '#FF6C00',
   },
   inputPasswordShower: {
     fontSize: 16,
-    textAlign: "right",
-    fontFamily: "Roboro-Regular",
-    color: "#1B4371",
-    position: "absolute",
+    textAlign: 'right',
+    fontFamily: 'Roboro-Regular',
+    color: '#1B4371',
+    position: 'absolute',
     bottom: 30,
     left: 70,
   },
   scrollViewContainer: {
     minHeight: screenSize.height,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   formWrapper: {
     paddingTop: 92,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },
   button: {
     width: 343,
     height: 51,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FF6C00",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FF6C00',
     borderRadius: 100,
     marginTop: 43,
     marginBottom: 16,
   },
   buttonText: {
-    fontFamily: "Roboro-Regular",
+    fontFamily: 'Roboro-Regular',
     fontSize: 16,
-    color: "#fff",
+    color: '#fff',
   },
   linkText: {
-    fontFamily: "Roboro-Regular",
+    fontFamily: 'Roboro-Regular',
     fontSize: 16,
-    color: "#1B4371",
+    color: '#1B4371',
   },
 });
+export default withNavigation(RegistrationScreen);

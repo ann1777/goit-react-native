@@ -1,45 +1,70 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import LoginScreen from "./Screen/LoginScreen"; // Import LoginScreenProps
-import RegistrationScreen from "./Screen/RegistrationScreen"; // Import RegistrationScreenProps
-
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const native_1 = require("@react-navigation/native");
+const native_stack_1 = require("@react-navigation/native-stack");
+const RegistrationScreen_1 = __importDefault(require("Screen/RegistrationScreen"));
+const Font = __importStar(require("expo-font"));
+const expo_status_bar_1 = require("expo-status-bar");
+const react_1 = __importStar(require("react"));
+const LoginScreen_1 = __importDefault(require("./Screen/LoginScreen"));
 function App() {
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-  const Stack = createNativeStackNavigator();
-
-  const handleRegister = () => {
-    setIsRegistered(true);
-  };
-
-  const handleLogin = () => {
-    setIsLogin(true);
-  };
-
-  return (
-    <NavigationContainer>
+    const [isRegistered, setIsRegistered] = (0, react_1.useState)(false);
+    const [isFontLoaded, setFontLoaded] = (0, react_1.useState)(false);
+    const [isLogin, setIsLogin] = (0, react_1.useState)(false);
+    const Stack = (0, native_stack_1.createNativeStackNavigator)();
+    (0, react_1.useEffect)(() => {
+        async function loadFonts() {
+            await Font.loadAsync({
+                'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+                'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+                'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+            });
+            setFontLoaded(true);
+        }
+        loadFonts();
+    }, []);
+    const handleRegister = () => {
+        setIsRegistered(true);
+    };
+    const handleLogin = () => {
+        setIsLogin(true);
+    };
+    if (!isFontLoaded) {
+        return null;
+    }
+    return (<native_1.NavigationContainer>
       <Stack.Navigator>
-        {isLogin ? (
-          <Stack.Screen
-            name="LoginScreen"
-            component={(props) => (
-              <LoginScreen {...props} onLogin={handleLogin} />
-            )}
-          />
-        ) : isRegistered ? (
-          <Stack.Screen
-            name="RegistrationScreen"
-            component={(props) => (
-              <RegistrationScreen {...props} onRegister={handleRegister} />
-            )}
-          />
-        ) : null}
+        {isLogin ? (<Stack.Screen name="LoginScreen" component={LoginScreen_1.default} initialParams={{ onLogin: handleLogin }}/>) : isRegistered ? (<Stack.Screen name="RegistrationScreen" component={(props) => (<RegistrationScreen_1.default {...props} onRegister={handleRegister} onLogin={handleLogin}/>)} options={{
+                headerShown: false,
+            }} initialParams={{ onRegister: handleRegister }}/>) : null}
       </Stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
-  );
+      <expo_status_bar_1.StatusBar style="auto"/>
+    </native_1.NavigationContainer>);
 }
-
-export default App;
+exports.default = App;

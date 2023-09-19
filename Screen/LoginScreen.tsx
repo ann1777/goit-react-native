@@ -30,14 +30,14 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const emailHandler = (value: string) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
       email: value,
     }));
   };
 
   const passwordHandler = (value: string) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
       password: value,
     }));

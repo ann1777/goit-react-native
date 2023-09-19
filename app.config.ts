@@ -1,6 +1,5 @@
-import { ExpoConfig } from "expo/config";
 
-const config: ExpoConfig = {
+const config = {
   name: "my-app",
   slug: "my-app",
 };
