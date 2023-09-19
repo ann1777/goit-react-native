@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-expo-project",
-    "slug": "my-expo-project",
+    "name": "angela-rn-project",
+    "slug": "angela-rn-project",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,20 +16,45 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.my-expo-project.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fluenttalk"
     },
-    "android": { "softwareKeyboardLayoutMode": "pan" },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "expo": {
-      "experiments": {
-        "tsconfigPaths": true
+    "extra": {
+      "eas": {
+        "projectId": "2c4605ad-d0a7-46c5-8237-e4a4cbd62be0"
       }
-    }
+    },
+    "owner": "500griven",
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2c4605ad-d0a7-46c5-8237-e4a4cbd62be0"
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
   }
 }
