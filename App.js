@@ -1,11 +1,8 @@
 import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import LoginScreen from "./Screen/LoginScreen.js";
-import RegistrationScreen from "./Screen/RegistrationScreen.js";
+import React from "react";
+import "react-native-gesture-handler";
 
 export default function App() {
-  const [isRegistered, setIsRegistered] = useState(false);
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -18,12 +15,12 @@ export default function App() {
 
   return (
     <>
-      {isRegistered ? (
-        <LoginScreen onRegister={() => setIsRegistered(false)} />
-      ) : (
-        <RegistrationScreen onRegister={() => setIsRegistered(true)} />
-      )}
-      <StatusBar style="auto" />
+      <View style={styles.container}>
+        <ImageBackground source={bgImg} resizeMode="cover" style={styles.image}>
+          <RegistrationScreen />
+        </ImageBackground>
+        <StatusBar style="auto" />
+      </View>
     </>
   );
 }
