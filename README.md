@@ -33,3 +33,17 @@
 7. Add styles for the `RegistrationScreen` component.
 
 8. Add styles for the `LoginScreen` component.
+   Use RegistrationScreen layout['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?type=design&node-id=3-26&mode=design&t=bamPCRiEccmWFDBc-0'],
+   RegistrationScreen layout with opened keyboard['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?type=design&node-id=32-57&mode=design&t=FsuiHdsnYuUu3FbB-0'],
+   LoginScreen layout['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?type=design&node-id=12-0&mode=design&t=TjqxuifN8oA0PeCU-0'],
+   LoginScreen layout with opened keyboard['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?type=design&node-id=33-126&mode=design&t=jH1PMu0lsOZsXY0e-0']
+
+## Task 3
+
+1. Add the logic of working with the form to the RegistrationScreen component
+
+2. Add the logic of working with the form to the LoginScreen component
+
+3. Collect data from them and output them to the console during the submission of forms.
+
+4. Add auto-close of the keyboard when clicked outside the forms (use Keyboard.dismiss)
