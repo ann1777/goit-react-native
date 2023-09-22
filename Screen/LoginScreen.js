@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import {
-  ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
+    ImageBackground,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
 } from "react-native";
 import backgroundImg from "../assets/ScreenBG.png";
 
 const initialState = {
-  email: "",
-  password: "",
-  isPasswordFocus: false,
+    email: "",
+    password: "",
+    isPasswordFocus: false,
 };
 
 export default function RegistrationScreen() {
@@ -269,3 +269,4 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
+exports.default = (0, react_navigation_1.withNavigation)(LoginScreen);

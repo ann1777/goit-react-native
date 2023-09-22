@@ -1,22 +1,29 @@
-import * as React from "react";
-import Svg, { Circle, Path } from "react-native-svg";
+import React from "react";
+import { IoAdd } from 'react-icons/io5';
+import { ViewStyle } from "react-native";
+import { SvgProps } from "react-native-svg";
 
-const SvgAddButton = ({
-  style: {
-    fill = "#ff6c00",
-    stroke = "#ff6c00",
-    backgroundColor = "#ffffff",
-  } = {},
-}) => (
-  <Svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} fill="none">
-    <Circle cx={12.5} cy={12.5} r={12} fill={backgroundColor} stroke={stroke} />
-    <Path
-      fill={fill}
-      fillRule="evenodd"
-      d="M13 6h-1v6H6v1h6v6h1v-6h6v-1h-6V6Z"
-      clipRule="evenodd"
-    />
-  </Svg>
-);
+interface SvgAddButtonProps extends SvgProps {
+  style?: ViewStyle;
+}
+
+const SvgAddButton: React.FC<SvgAddButtonProps> = ({
+  className,
+  onClick,
+  width = "24",
+  height = "24",
+}) => {
+  return (
+    <svg
+      className={className}
+      onClick={onClick}
+      width={width}
+      height={height}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <IoAdd />
+    </svg>
+  );
+};
 
 export default SvgAddButton;

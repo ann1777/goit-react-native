@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import {
-  Image,
-  ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
+    Image,
+    ImageBackground,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
 } from "react-native";
 import backgroundImg from "../assets/ScreenBG.png";
 import SvgAddButton from "../assets/svg/svgAddButton";
 
 const initialState = {
-  login: "",
-  email: "",
-  password: "",
-  isPasswordFocus: false,
+    login: '',
+    email: '',
+    password: '',
+    isPasswordFocus: false,
 };
 
 export default function RegistrationScreen() {
@@ -363,3 +363,4 @@ const styles = StyleSheet.create({
     color: "rgba(27, 67, 113, 1)",
   },
 });
+exports.default = (0, react_navigation_1.withNavigation)(RegistrationScreen);
