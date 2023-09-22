@@ -1,25 +1,28 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import { StyleSheet } from "react-native";
-// import ProfileScreen from "./ProfileScreen";
-// import CreatePostScreen from "./CreatePostScreen";
-// import PostsScreen from "./PostsScreen";
-import PostNavigation from "../Components/Navigation";
+import { NavigationContainer } from "@react-navigation/native";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { onStateChange } from "../redux/authSlice";
+import { useRoute } from "../router";
 
-const Home = createStackNavigator();
+export const HomeScreen = () => {
+  const { stateChange } = useSelector((state) => state.auth);
 
-export default function HomeScreen() {
-  return (
-    <Home.Navigator initialRouteName="PostsBar">
-      <Home.Screen
-        name="PostsBar"
-        component={PostNavigation}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Home.Navigator>
-  );
-}
+  const dispatch = useDispatch();
 
-const styles = StyleSheet.create({});
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const updateInfo = {
+          userId: user.uid,
+          nickname: user.displayName,
+          email: user.email,
+          avatar: user.photoURL,
+        };
+        dispatch(onStateChange(updateInfo));
+      }
+    });
+  }, []);
+  const routing = useRoute(stateChange);
+
+  return <NavigationContainer>{routing}</NavigationContainer>;
+};
