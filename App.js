@@ -1,6 +1,9 @@
 import {useFonts} from 'expo-font';
 import React from 'react';
 import 'react-native-gesture-handler';
+import {Provider} from 'react-redux';
+import {store} from './Redux/store';
+import {HomeScreen} from './Screens/HomeScreen';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,12 +18,19 @@ export default function App() {
 
   return (
     <>
-      <View style={styles.container}>
+      <Provider store={store}>
+        <PersistGate
+          loading={<Text>Loading...</Text>}
+          persistor={store.persistor}>
+          <HomeScreen />
+        </PersistGate>
+      </Provider>
+      {/* <View style={styles.container}>
         <ImageBackground source={bgImg} resizeMode="cover" style={styles.image}>
           <RegistrationScreen />
         </ImageBackground>
         <StatusBar style="auto" />
-      </View>
+      </View> */}
     </>
   );
 }

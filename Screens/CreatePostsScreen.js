@@ -1,12 +1,12 @@
-import { FontAwesome } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
-import { Camera } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
-import * as Location from "expo-location";
-import * as ImagePicker from "expo-image-picker";
-import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import {FontAwesome} from '@expo/vector-icons';
+import {Feather} from '@expo/vector-icons';
+import {useEffect, useState} from 'react';
+import {Camera} from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
+import * as Location from 'expo-location';
+import * as ImagePicker from 'expo-image-picker';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -20,11 +20,14 @@ import {
   Platform,
   ScrollView,
   Alert,
-} from "react-native";
+} from 'react-native';
+import {uploadBytes, getDownloadURL, ref} from 'firebase/storage';
+import {addDoc, collection} from 'firebase/firestore';
+import {db, storage} from '../firebase/config';
 
 export const CreatePostsScreen = () => {
   const [img, setImg] = useState(null);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [location, setLocation] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -32,7 +35,7 @@ export const CreatePostsScreen = () => {
   const [coords, setCoords] = useState(null);
   const [country, setCountry] = useState(null);
   const navigation = useNavigation();
-  const { userId, nickname } = useSelector((state) => state.auth);
+  const {userId, nickname} = useSelector(state => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -44,21 +47,12 @@ export const CreatePostsScreen = () => {
     })();
 
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
+      const {status} = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
 
-      setHasPermission(status === "granted");
+      setHasPermission(status === 'granted');
     })();
   }, []);
-
-  // +++++++++++++++++++++++++++++++
-  // if (hasPermission === null) {
-  //   return <View />;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No access to camera</Text>;
-  // }
-  // ++++++++++++++++++++++++++++++++++
 
   const getLocation = async () => {
     try {
@@ -75,7 +69,7 @@ export const CreatePostsScreen = () => {
 
   const takePicture = async () => {
     try {
-      const { uri } = await cameraRef.takePictureAsync();
+      const {uri} = await cameraRef.takePictureAsync();
       setImg(uri);
       await MediaLibrary.createAssetAsync(uri);
       getLocation();
@@ -106,7 +100,7 @@ export const CreatePostsScreen = () => {
       const file = await response.blob();
       await uploadBytes(ref(storage, `photos/${file._data.blobId}`), file);
       const photoUrl = await getDownloadURL(
-        ref(storage, `photos/${file._data.blobId}`)
+        ref(storage, `photos/${file._data.blobId}`),
       );
       return photoUrl;
     } catch (error) {
@@ -117,7 +111,7 @@ export const CreatePostsScreen = () => {
   const uploadPost = async () => {
     try {
       const img = await uploadImg();
-      await addDoc(collection(db, "posts"), {
+      await addDoc(collection(db, 'posts'), {
         userId,
         nickname,
         img,
@@ -134,16 +128,16 @@ export const CreatePostsScreen = () => {
 
   const handleSharePost = () => {
     if (!img || !title || !location) {
-      return Alert.alert("Fill in all fields");
+      return Alert.alert('Fill in all fields');
     }
     getLocation();
     uploadPost();
-    navigation.navigate("InitialPostsScreen");
+    navigation.navigate('InitialPostsScreen');
     reset();
   };
   function reset() {
     setImg(null);
-    setTitle("");
+    setTitle('');
     setLocation(null);
   }
 
@@ -153,15 +147,14 @@ export const CreatePostsScreen = () => {
         <ScrollView>
           {img ? (
             <View style={styles.createImgWrapper}>
-              <Image style={styles.imgStyle} source={{ uri: img }} />
+              <Image style={styles.imgStyle} source={{uri: img}} />
 
               <Pressable
                 style={{
                   ...styles.iconWrapper,
-                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
                 }}
-                onPress={reset}
-              >
+                onPress={reset}>
                 <FontAwesome name="camera" size={24} color="#FFFFFF" />
               </Pressable>
             </View>
@@ -173,11 +166,10 @@ export const CreatePostsScreen = () => {
                   setType(
                     type === Camera.Constants.Type.back
                       ? Camera.Constants.Type.front
-                      : Camera.Constants.Type.back
+                      : Camera.Constants.Type.back,
                   );
-                }}
-              >
-                <Text style={{ fontSize: 18, color: "white" }}> Flip </Text>
+                }}>
+                <Text style={{fontSize: 18, color: 'white'}}> Flip </Text>
               </Pressable>
 
               <Pressable style={styles.iconWrapper} onPress={takePicture}>
@@ -195,16 +187,15 @@ export const CreatePostsScreen = () => {
           </Pressable>
 
           <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={500}
-            style={{ flex: 1 }}
-          >
+            style={{flex: 1}}>
             <TextInput
               value={title}
               placeholder="Назва..."
-              onChangeText={(text) => setTitle(text)}
+              onChangeText={text => setTitle(text)}
               placeholderTextColor="#BDBDBD"
-              style={{ ...styles.inputCreate, marginBottom: 16 }}
+              style={{...styles.inputCreate, marginBottom: 16}}
             />
             <View style={styles.inputMapWrapper}>
               <Feather
@@ -216,24 +207,22 @@ export const CreatePostsScreen = () => {
               <TextInput
                 value={location}
                 placeholder="Місцевість..."
-                onChangeText={(text) => setLocation(text)}
+                onChangeText={text => setLocation(text)}
                 placeholderTextColor="#BDBDBD"
-                style={{ ...styles.inputCreate, paddingLeft: 28 }}
+                style={{...styles.inputCreate, paddingLeft: 28}}
               />
             </View>
             <Pressable
               style={{
                 ...styles.puplishBtn,
-                backgroundColor: img ? "#FF6C00" : "#F6F6F6",
+                backgroundColor: img ? '#FF6C00' : '#F6F6F6',
               }}
-              onPress={handleSharePost}
-            >
+              onPress={handleSharePost}>
               <Text
                 style={{
                   ...styles.puplishBtnText,
-                  color: img ? "#FFFFFF" : "#BDBDBD",
-                }}
-              >
+                  color: img ? '#FFFFFF' : '#BDBDBD',
+                }}>
                 Опублікувати
               </Text>
             </Pressable>
@@ -254,96 +243,96 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
   createImgWrapper: {
-    width: "100%",
+    width: '100%',
     height: 240,
     marginBottom: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: "#E8E8E8",
-    overflow: "hidden",
-    backgroundColor: "#F6F6F6",
+    borderColor: '#E8E8E8',
+    overflow: 'hidden',
+    backgroundColor: '#F6F6F6',
   },
   imgStyle: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   camera: {
-    width: "100%",
+    width: '100%',
     height: 240,
     marginBottom: 8,
     borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconWrapper: {
-    position: "absolute",
+    position: 'absolute',
     width: 60,
     height: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 50,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   flipContainer: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     bottom: 0,
   },
   btnLoadText: {
     marginBottom: 32,
-    fontFamily: "Roboto400",
+    fontFamily: 'Roboto400',
     fontSize: 16,
-    color: "#BDBDBD",
+    color: '#BDBDBD',
   },
   inputCreate: {
-    width: "100%",
+    width: '100%',
     paddingVertical: 16,
-    fontFamily: "Roboto400",
+    fontFamily: 'Roboto400',
     fontSize: 16,
-    color: "#212121",
+    color: '#212121',
     borderBottomWidth: 1,
-    borderBottomColor: "#E8E8E8",
+    borderBottomColor: '#E8E8E8',
   },
   inputMapWrapper: {
-    position: "relative",
-    flexDirection: "row",
-    alignItems: "center",
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 32,
   },
   iconMap: {
-    position: "absolute",
-    top: "50%",
-    transform: [{ translateY: -12 }],
-    flexDirection: "row",
-    alignItems: "center",
+    position: 'absolute',
+    top: '50%',
+    transform: [{translateY: -12}],
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   puplishBtn: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: 16,
     borderRadius: 100,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: '#F6F6F6',
   },
   puplishBtnText: {
-    fontFamily: "Roboto400",
+    fontFamily: 'Roboto400',
     fontSize: 16,
-    color: "#BDBDBD",
+    color: '#BDBDBD',
   },
   deleteBtn: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
     marginBottom: 32,
     paddingHorizontal: 23,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: '#F6F6F6',
   },
 });

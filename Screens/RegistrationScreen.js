@@ -15,6 +15,15 @@ import {
 } from 'react-native';
 import backgroundImg from '../assets/ScreenBG.png';
 import SvgAddButton from '../assets/svg/svgAddButton';
+import {togglePasswordVisibility} from '../helpers/passwordVisibility';
+import {useNavigation} from '@react-navigation/native';
+import {StatusBar} from 'expo-status-bar';
+import {AntDesign} from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import {authSignUpUser} from '../redux/operations';
+import {useDispatch} from 'react-redux';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+import {storage} from '../firebase/config';
 
 const initialState = {
   login: '',
@@ -24,8 +33,12 @@ const initialState = {
 };
 
 export default function RegistrationScreen() {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [state, setState] = useState(initialState);
   const [isAvatar, setAvatar] = useState(false);
+  const [loginFocus, setLoginFocus] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState({1: false, 2: false, 3: false});
@@ -70,6 +83,49 @@ export default function RegistrationScreen() {
     setPasswordFocus(!passwordFocus);
   };
 
+  const saveAvatar = async () => {
+    try {
+      const response = await fetch(avatar);
+      const file = await response.blob();
+      await uploadBytes(ref(storage, `avatars/${file._data.blobId}`), file);
+      const imgUrl = await getDownloadURL(
+        ref(storage, `avatars/${file._data.blobId}`),
+      );
+      return imgUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSignUp = async () => {
+    if (!login || !email || !password) {
+      return Alert.alert('Fill in all fields');
+    }
+    const avatar = await saveAvatar();
+    dispatch(authSignUpUser({email, password, login, avatar}));
+    resetForm();
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
+
+  function resetForm() {
+    setLogin('');
+    setEmail('');
+    setPassword('');
+    setAvatar(null);
+  }
+
   return (
     <>
       <StatusBar style="auto" />
@@ -86,15 +142,34 @@ export default function RegistrationScreen() {
                     style={
                       isAvatar ? styles.btnAddAvatarLoad : styles.btnAddAvatar
                     }>
-                    <SvgAddButton
-                      style={
-                        isAvatar
-                          ? styles.btnAddAvatarSvgLoad
-                          : styles.btnAddAvatarSvg
-                      }
-                    />
+                    {isAvatar ? (
+                      <Pressable
+                        style={
+                          isAvatar
+                            ? styles.btnAddAvatarSvgLoad
+                            : styles.btnAddAvatarSvg
+                        }
+                        onPress={() => {
+                          setAvatar(null);
+                        }}>
+                        <AntDesign
+                          name="closecircleo"
+                          size={25}
+                          color="#BDBDBD"
+                        />
+                      </Pressable>
+                    ) : (
+                      <Pressable style={styles.avatarIcon} onPress={pickImage}>
+                        <AntDesign
+                          name="pluscircleo"
+                          size={25}
+                          color="#FF6C00"
+                        />
+                      </Pressable>
+                    )}
                   </TouchableOpacity>
                 </View>
+
                 <Text style={styles.title}>Реєстрація</Text>
                 <TextInput
                   key="login"

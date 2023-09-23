@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-apply plugin: "com.facebook.react"
+apply plugin: 'kotlin-android'
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21"

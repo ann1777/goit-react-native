@@ -1,16 +1,18 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { onStateChange } from "../redux/authSlice";
-import { useRoute } from "../router";
+import {NavigationContainer} from '@react-navigation/native';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {onStateChange} from '../redux/authSlice';
+import {useRoute} from '../router';
+import {auth} from '../firebase/config';
+import {onAuthStateChanged} from 'firebase/auth';
 
 export const HomeScreen = () => {
-  const { stateChange } = useSelector((state) => state.auth);
+  const {stateChange} = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       if (user) {
         const updateInfo = {
           userId: user.uid,

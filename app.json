@@ -16,19 +16,19 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.my-expo-project.app",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/img/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "softwareKeyboardLayoutMode": "pan"
     },
-    "android": {"softwareKeyboardLayoutMode": "pan"},
     "web": {
       "favicon": "./assets/img/favicon.png"
     },
     "expo": {
       "experiments": {
         "tsconfigPaths": true
+      },
+      "extra": {
+        "eas": {
+          "projectId": "e534d7cc-024e-4070-8e92-95d8069937d1"
+        }
       }
     }
   }
