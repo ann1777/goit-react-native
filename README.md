@@ -97,3 +97,7 @@ MapScreen layout ['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-
 8. Add Logout logic to the PostsScreen when the icon is clicked in the header using Firebase methods
 9. Add logic for uploading posts to the database using Firebase and Redux
 10. Add logic to add a comment under a post using Firebase and Redux
+
+## Task 7
+
+1. Upload the project to the expo servers
