@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
-    ImageBackground,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    View,
-} from "react-native";
-import backgroundImg from "../assets/ScreenBG.png";
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from '../firebase/config.js';
+import {auth} from '../config';
+import {
+  ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import backgroundImg from '../assets/ScreenBG.png';
 
 const initialState = {
-    email: "",
-    password: "",
-    isPasswordFocus: false,
+  email: '',
+  password: '',
+  isPasswordFocus: false,
 };
 
 export default function RegistrationScreen() {
@@ -24,16 +31,16 @@ export default function RegistrationScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const emailHandler = (value) => {
-    setState((prevState) => ({ ...prevState, email: value }));
+  const emailHandler = value => {
+    setState(prevState => ({...prevState, email: value}));
   };
 
-  const passwordHandler = (value) => {
-    setState((prevState) => ({ ...prevState, password: value }));
+  const passwordHandler = value => {
+    setState(prevState => ({...prevState, password: value}));
   };
 
   const toggleShowPassword = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
+    setShowPassword(prevShowPassword => !prevShowPassword);
   };
 
   const handleEmailFocus = () => {
@@ -66,10 +73,9 @@ export default function RegistrationScreen() {
             <View style={styles.loginWrap}>
               <TouchableWithoutFeedback onPress={keyboardHide}>
                 <KeyboardAvoidingView
-                  behavior={Platform.OS === "ios" ? "padding" : "height"}
+                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                   style={styles.keyboardAvoidingContainer}
-                  keyboardVerticalOffset={-150}
-                >
+                  keyboardVerticalOffset={-150}>
                   <View style={styles.loginSection}>
                     <Text style={styles.title}>Увійти</Text>
                     <TextInput
@@ -89,7 +95,7 @@ export default function RegistrationScreen() {
                         value={state.password}
                         onChangeText={passwordHandler}
                         placeholder="••••••••••••"
-                        placeholderTextColor={"#BDBDBD"}
+                        placeholderTextColor={'#BDBDBD'}
                         secureTextEntry={!showPassword}
                         style={styles.passwordInput}
                         onFocus={() => {
@@ -103,30 +109,26 @@ export default function RegistrationScreen() {
                       />
                       <Pressable
                         onPress={toggleShowPassword}
-                        style={styles.toggleButton}
-                      >
+                        style={styles.toggleButton}>
                         <Text style={styles.toggleText}>
-                          {showPassword ? "Сховати" : "Показати"}
+                          {showPassword ? 'Сховати' : 'Показати'}
                         </Text>
                       </Pressable>
                     </View>
                     <TouchableOpacity
                       onPress={handleSubmit}
-                      style={styles.buttonRg}
-                    >
+                      style={styles.buttonRg}>
                       <Text style={styles.buttonText}>Увійти</Text>
                     </TouchableOpacity>
                     <Pressable
-                      onPress={() => navigation.navigate("RegistrationScreen")}
-                    >
+                      onPress={() => navigation.navigate('RegistrationScreen')}>
                       <Text style={styles.textQ}>
-                        Немає акаунту?{" "}
+                        Немає акаунту?{' '}
                         <Text
                           style={{
                             ...styles.textLink,
-                            textDecorationLine: "underline",
-                          }}
-                        >
+                            textDecorationLine: 'underline',
+                          }}>
                           Зареєструватися
                         </Text>
                       </Text>
@@ -145,23 +147,23 @@ export default function RegistrationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingBottom: 30,
   },
   background: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-start",
+    resizeMode: 'cover',
+    justifyContent: 'flex-start',
   },
 
   loginWrap: {
-    width: "100%",
-    height: "60.2%",
-    top: "39.8%",
+    width: '100%',
+    height: '60.2%',
+    top: '39.8%',
     bottom: 0,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: "rgba(255, 255, 255, 1)",
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
 
   keyboardAvoidingContainer: {
@@ -169,23 +171,23 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     lineHeight: 35.16,
     letterSpacing: 1,
-    textAlign: "center",
-    color: "rgba(33, 33, 33, 1)",
+    textAlign: 'center',
+    color: 'rgba(33, 33, 33, 1)',
     marginTop: 32,
     marginBottom: 32,
   },
 
   loginSection: {
-    position: "relative",
-    width: "100%",
+    position: 'relative',
+    width: '100%',
     paddingHorizontal: 16,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
@@ -194,8 +196,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "rgba(232, 232, 232, 1)",
-    backgroundColor: "rgba(246, 246, 246, 1)",
+    borderColor: 'rgba(232, 232, 232, 1)',
+    backgroundColor: 'rgba(246, 246, 246, 1)',
     marginBottom: 16,
     paddingLeft: 16,
   },
@@ -204,69 +206,69 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "rgba(232, 232, 232, 1)",
-    backgroundColor: "rgba(246, 246, 246, 1)",
+    borderColor: 'rgba(232, 232, 232, 1)',
+    backgroundColor: 'rgba(246, 246, 246, 1)',
     marginBottom: 43,
     paddingLeft: 16,
     paddingRight: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   passwordInput: {
     flex: 1,
     height: 50,
-    width: "100%",
+    width: '100%',
     fontSize: 16,
-    fontFamily: "Roboto-Regular",
-    fontWeight: "normal",
+    fontFamily: 'Roboto-Regular',
+    fontWeight: 'normal',
     lineHeight: 18.75,
   },
 
   toggleText: {
-    textAlign: "center",
+    textAlign: 'center',
 
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: 'normal',
     lineHeight: 18.75,
 
-    color: "rgba(27, 67, 113, 1)",
+    color: 'rgba(27, 67, 113, 1)',
   },
 
   buttonRg: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: 'normal',
     lineHeight: 18.75,
-    textAlign: "center",
-    color: "rgba(255, 255, 255, 1)",
+    textAlign: 'center',
+    color: 'rgba(255, 255, 255, 1)',
 
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 51,
     padding: 16,
     borderRadius: 50,
     marginBottom: 15,
-    backgroundColor: "rgba(255, 108, 0, 1)",
+    backgroundColor: 'rgba(255, 108, 0, 1)',
   },
 
   buttonText: {
-    color: "rgba(255, 255, 255, 1)",
+    color: 'rgba(255, 255, 255, 1)',
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: 'normal',
     lineHeight: 18.75,
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
   },
 
   textQ: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: 'normal',
     lineHeight: 18.75,
-    textAlign: "center",
-    color: "rgba(27, 67, 113, 1)",
+    textAlign: 'center',
+    color: 'rgba(27, 67, 113, 1)',
   },
 });
 exports.default = (0, react_navigation_1.withNavigation)(LoginScreen);

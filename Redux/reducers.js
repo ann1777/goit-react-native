@@ -1,2 +1,2 @@
-import {rootReducer} from './rootSlice';
+import {rootReducer} from './authSlice';
 export default {auth: rootReducer};

@@ -1,3 +1,8 @@
+import {AntDesign} from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import {StatusBar} from 'expo-status-bar';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import React, {useState} from 'react';
 import {
   Image,
@@ -13,16 +18,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import backgroundImg from '../assets/ScreenBG.png';
-import SvgAddButton from '../assets/svg/svgAddButton';
-import {togglePasswordVisibility} from '../helpers/passwordVisibility';
-import {useNavigation} from '@react-navigation/native';
-import {StatusBar} from 'expo-status-bar';
-import {AntDesign} from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import {authSignUpUser} from '../redux/operations';
 import {useDispatch} from 'react-redux';
-import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+import {authSignUpUser} from '../Redux/operations';
+import backgroundImg from '../assets/ScreenBG.png';
 import {storage} from '../firebase/config';
 
 const initialState = {

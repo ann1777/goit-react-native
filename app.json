@@ -4,7 +4,7 @@
     "slug": "my-expo-project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/svg/add-line.svg",
+    "icon": "./assets/img/favicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/img/splash.png",
@@ -21,14 +21,12 @@
     "web": {
       "favicon": "./assets/img/favicon.png"
     },
-    "expo": {
-      "experiments": {
-        "tsconfigPaths": true
-      },
-      "extra": {
-        "eas": {
-          "projectId": "e534d7cc-024e-4070-8e92-95d8069937d1"
-        }
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e534d7cc-024e-4070-8e92-95d8069937d1"
       }
     }
   }

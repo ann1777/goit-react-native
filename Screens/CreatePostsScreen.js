@@ -1,29 +1,54 @@
-import {FontAwesome} from '@expo/vector-icons';
-import {Feather} from '@expo/vector-icons';
-import {useEffect, useState} from 'react';
-import {Camera} from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
-import * as Location from 'expo-location';
-import * as ImagePicker from 'expo-image-picker';
-import {useSelector} from 'react-redux';
+import {Feather, FontAwesome} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import {Camera} from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import * as MediaLibrary from 'expo-media-library';
+import {addDoc, collection} from 'firebase/firestore';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+import {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
+  Alert,
   Image,
   Keyboard,
   KeyboardAvoidingView,
-  TextInput,
-  Pressable,
   Platform,
+  Pressable,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import {uploadBytes, getDownloadURL, ref} from 'firebase/storage';
-import {addDoc, collection} from 'firebase/firestore';
+import {useSelector} from 'react-redux';
 import {db, storage} from '../firebase/config';
+
+const getDataFromFirestore = async () => {
+  try {
+    const snapshot = await getDocs(collection(db, 'users'));
+    console.log(snapshot);
+    snapshot.forEach(doc => console.log(`${doc.id} =>`, doc.data()));
+    return snapshot.map(doc => ({id: doc.id, data: doc.data()}));
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const writeDataToFirestore = async () => {
+  try {
+    const docRef = await addDoc(collection(db, 'users'), {
+      first: 'Ada',
+      last: 'Lovelace',
+      born: 1815,
+    });
+    console.log('Document written with ID: ', docRef.id);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+    throw e;
+  }
+};
 
 export const CreatePostsScreen = () => {
   const [img, setImg] = useState(null);
@@ -73,6 +98,7 @@ export const CreatePostsScreen = () => {
       setImg(uri);
       await MediaLibrary.createAssetAsync(uri);
       getLocation();
+      writeDataToFirestore();
     } catch (error) {
       console.log(error);
     }
@@ -141,6 +167,12 @@ export const CreatePostsScreen = () => {
     setLocation(null);
   }
 
+  const handleForm = () => {
+    console.log({name, location, photo, locationName});
+    navigation.navigate('Map');
+    getDataFromFirestore();
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.section}>
@@ -154,7 +186,13 @@ export const CreatePostsScreen = () => {
                   ...styles.iconWrapper,
                   backgroundColor: 'rgba(255, 255, 255, 0.3)',
                 }}
-                onPress={reset}>
+                onPress={() => {
+                  setType(
+                    type === Camera.Constants.Type.back
+                      ? Camera.Constants.Type.front
+                      : Camera.Constants.Type.back,
+                  );
+                }}>
                 <FontAwesome name="camera" size={24} color="#FFFFFF" />
               </Pressable>
             </View>
@@ -167,7 +205,7 @@ export const CreatePostsScreen = () => {
                     type === Camera.Constants.Type.back
                       ? Camera.Constants.Type.front
                       : Camera.Constants.Type.back,
-                  );
+                  ).handlePhoto();
                 }}>
                 <Text style={{fontSize: 18, color: 'white'}}> Flip </Text>
               </Pressable>
@@ -232,7 +270,6 @@ export const CreatePostsScreen = () => {
         <Pressable style={styles.deleteBtn} onPress={reset}>
           <Feather name="trash-2" size={24} color="#BDBDBD" />
         </Pressable>
-        {/* </ScrollView> */}
       </View>
     </TouchableWithoutFeedback>
   );

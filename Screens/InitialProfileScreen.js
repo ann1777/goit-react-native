@@ -2,6 +2,7 @@ import {AntDesign, Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import {StatusBar} from 'expo-status-bar';
+import {collection, onSnapshot, query, where} from 'firebase/firestore';
 import {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -14,11 +15,10 @@ import {
   View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import ScreenBG from '../assets/img/ScreenBG.png';
 import {PostItem} from '../Components/PostItem';
-import {authSingOutUser} from '../redux/operations';
+import {authSingOutUser} from '../Redux/operations';
+import ScreenBG from '../assets/img/ScreenBG.png';
 import {db} from '../firebase/config';
-import {query, collection, where, onSnapshot, doc} from 'firebase/firestore';
 
 export const InitialProfileScreen = () => {
   const {nickname, avatar, userId} = useSelector(state => state.auth);
