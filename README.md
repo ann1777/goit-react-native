@@ -47,3 +47,39 @@
 3. Collect data from them and output them to the console during the submission of forms.
 
 4. Add auto-close of the keyboard when clicked outside the forms (use Keyboard.dismiss)
+
+## Task 4
+
+1. Create screens: CreatePostsScreen, CommentsScreen, ProfileScreen, MapScreen, HomeScreen.
+
+2. Connect Navigation to the Project
+3. Add transitions between LoginScreen and RegistrationScreen to the project using the createStackNavigator component.
+
+4. After submitting in the LoginScreen, the RegistrationScreen switches to Home, where the PostsScreen is immediately displayed
+5. Connect the bottom navigation using createBottomTabNavigator.
+6. Add a logout icon in the header on the PostsScreen screen
+
+PostsScreen layout without Homework content (Copy)['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?type=design&node-id=33-126&mode=design&t=jH1PMu0lsOZsXY0e-0']
+
+PostsScreen layout with Posts (Copy)['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-86&t=zLy5KtBgsPgUDWY3-0']
+
+## Task 5
+
+1. Connect the camera to the CreatePostsScreen component;
+
+2. When the CreatePostsScreen screen is opened, the camera is activated and the image from it is displayed in the block with the camera icon
+3. Clicking on the camera icon takes a picture
+4. You can add the name of the photo to the input with the Name placeholder
+5. You can add the name of the place where the picture was taken to the input with the Location placeholder
+6. Add geolocation definition at the time of creating a post when clicking the Publish button
+7. After creating a post, it should redirect to PostsScreen
+8. В компоненті окремого посту при кліку на іконку коментарів перекидає на екран CommentsScreen
+9. In the component of a separate post, when you click on the geolocation icon, it switches to the MapScreen screen, where you can see a map with a marker where the photo was taken
+
+CommentsScreen layout with Comments['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=41-0&t=vDyJjIvhOk6v4uZ7-0']
+
+CreatePostsScreen layout when opening the screen['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-86&t=hdpZPYSLTyS7klkX-0']
+
+CreatePostsScreen layout after the photo is taken MapScreen component layout['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-13&t=5kWIH0XRsJwnJfHy-0']
+
+MapScreen layout ['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=43-54&t=58UisgPOnMIySl1m-0']
