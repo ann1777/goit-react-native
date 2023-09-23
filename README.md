@@ -1,4 +1,4 @@
-# goit-react-native-task-02
+# goit-react-native
 
 ## Task 1
 
