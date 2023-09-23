@@ -83,3 +83,17 @@ CreatePostsScreen layout when opening the screen['['https://www.figma.com/file/Y
 CreatePostsScreen layout after the photo is taken MapScreen component layout['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-13&t=5kWIH0XRsJwnJfHy-0']
 
 MapScreen layout ['['https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=43-54&t=58UisgPOnMIySl1m-0']
+.
+
+## Task 6
+
+1. Connect Redux to the project
+2. Connect Firebase to the project
+3. Add registration logic to the RegistrationScreen via Firebase methods
+4. Add login logic to LoginScreen via Firebase methods
+5. Update the user profile on Firebase and add the login there in the displayName field after registration
+6. Store user data in Redux after registration or login
+7. Add a check whether the user is logged in to the application or not. If logged in, immediately redirect to the PostsScreen screen, otherwise - to the LoginScreen screen
+8. Add Logout logic to the PostsScreen when the icon is clicked in the header using Firebase methods
+9. Add logic for uploading posts to the database using Firebase and Redux
+10. Add logic to add a comment under a post using Firebase and Redux
