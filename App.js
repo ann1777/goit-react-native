@@ -1,12 +1,12 @@
-import { useFonts } from "expo-font";
-import React from "react";
-import "react-native-gesture-handler";
+import {useFonts} from 'expo-font';
+import React from 'react';
+import 'react-native-gesture-handler';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+    'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
   });
 
   if (!fontsLoaded) {

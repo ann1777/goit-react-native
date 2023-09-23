@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { signin, signout } from "./operations";
+import {createSlice} from '@reduxjs/toolkit';
+import {signin, signout} from './operations';
 
-const handlePending = (state) => {
+const handlePending = state => {
   state.isLoading = true;
 };
 
@@ -11,19 +11,29 @@ const handleRejected = (state, action) => {
 };
 
 const initialState = {
-  user: null,
-  posts: null,
-  error: null,
-  isLoading: false,
+  userId: null,
+  nickname: null,
+  stateChange: false,
+  email: null,
+  avatar: null,
 };
 
-const slice = createSlice({
-  name: "main",
+export const authSlice = createSlice({
+  name: 'auth',
   initialState,
+  reducers: {
+    authStateChanged: (state, {payload}) => ({
+      ...state,
+      userId: payload.userId,
+      nickname: payload.nickname,
+      email: payload.email,
+      stateChange: true,
+      avatar: payload.avatar,
+    }),
+  },
 
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-
       .addCase(signin.pending, handlePending)
       .addCase(signin.rejected, handleRejected)
       .addCase(signin.fulfilled, (state, action) => {
