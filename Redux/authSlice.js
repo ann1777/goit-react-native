@@ -1,5 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {signin, signout} from './operations';
+import {
+  createpost,
+  getposts,
+  signin,
+  signout,
+  signup,
+  updateuser,
+} from './operations';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -34,10 +41,25 @@ export const authSlice = createSlice({
 
   extraReducers: builder => {
     builder
+      .addCase(signup.pending, handlePending)
+      .addCase(signup.rejected, handleRejected)
+      .addCase(signup.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+        state.error = null;
+        console.log('registr');
+      })
       .addCase(signin.pending, handlePending)
       .addCase(signin.rejected, handleRejected)
       .addCase(signin.fulfilled, (state, action) => {
         state.user = action.payload.uid;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updateuser.pending, handlePending)
+      .addCase(updateuser.rejected, handleRejected)
+      .addCase(updateuser.fulfilled, (state, action) => {
+        state.user = action.payload;
         state.isLoading = false;
         state.error = null;
       })
@@ -47,8 +69,30 @@ export const authSlice = createSlice({
         state.user = null;
         state.isLoading = false;
         state.error = null;
+      })
+      .addCase(getposts.pending, handlePending)
+      .addCase(getposts.rejected, handleRejected)
+      .addCase(getposts.fulfilled, (state, action) => {
+        state.posts = action.payload;
+        state.isLoading = false;
+        state.error = null;
+        console.log('GetedPosts');
+      })
+      .addCase(addcomment.pending, handlePending)
+      .addCase(addcomment.rejected, handleRejected)
+      .addCase(addcomment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log('comment added');
+      })
+      .addCase(createpost.pending, handlePending)
+      .addCase(createpost.rejected, handleRejected)
+      .addCase(createpost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log('post created');
       });
   },
 });
 
-export const rootReducer = slice.reducer;
+export const authReducer = slice.reducer;
